@@ -1,0 +1,2600 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consolidated - Yang-GNMI Validator Test Report</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
+    <title>Dynamic Bootstrap Collapse Example</title>
+    <!-- Bootstrap CSS -->
+
+    <!-- Bootstrap JS and dependencies (Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <script
+      type="text/javascript"
+      src="//code.jquery.com/jquery-3.6.0.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"
+    />
+
+    <!-- SheetJS library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- FileSaver.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <script
+      type="text/javascript"
+      src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"
+    ></script>
+
+    <style>
+      /* Global Reset */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      /* Body styles */
+      body {
+        min-height: 100vh;
+        background-color: #b7afaf;
+        font-family: "Times New Roman", serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Containers */
+      .main-table-container {
+        display: flex;
+        width: 95%;
+        margin: 0 auto;
+        flex-direction: row;
+        gap: 10px;
+        background-color: #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        margin-top: 10px;
+      }
+
+      .container-main {
+        display: flex;
+        width: 95%;
+        margin: 0 auto;
+        flex-direction: row;
+        gap: 20px;
+        background-color: #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        max-height: 1200px;
+      }
+
+      .individual-summary {
+        display: flex;
+        width: auto;
+        margin: 0 auto;
+        flex-direction: row;
+        gap: 20px;
+      }
+
+      /* GNMI Operations Container & Section */
+      .gnmi-operations-container {
+        width: 100%;
+        overflow-x: auto;
+        padding: 10px 0;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        background-color: #ddd;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .gnmi-operations {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 20px;
+        padding-bottom: 10px;
+        overflow-x: auto;
+      }
+
+      /* Custom Scrollbar Styling */
+      .gnmi-operations::-webkit-scrollbar {
+        height: 8px;
+      }
+      .gnmi-operations::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+      }
+      .gnmi-operations::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+      }
+      .gnmi-operations::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+
+      /* Operation Card & Content */
+      .operation {
+        flex: 0 0 auto;
+        border: 2px solid #ddd;
+        padding: 20px;
+        width: 300px;
+        max-height: 600px;
+        border-radius: 8px;
+        background-color: #f5f5f5;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        transition: transform 0.2s;
+        position: relative;
+        overflow: inherit;
+      }
+
+      .operation .content {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+      }
+
+      .operation:hover {
+        transform: scale(1.02);
+      }
+
+      .operation-name {
+        font-weight: bold;
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: 5px;
+        background-color: #f4f4f4;
+        padding: 10px;
+        border-radius: 4px;
+        color: #333;
+      }
+
+      .operation-key {
+        font-size: 14px;
+        text-align: center;
+        color: #666;
+        margin-bottom: 15px;
+      }
+
+      /* Type Section & Validations */
+      .type-section {
+        margin-top: 10px;
+      }
+
+      .type-name {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 5px;
+        color: #555;
+      }
+
+      .validations {
+        margin-left: 20px;
+      }
+
+      .validation {
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+
+      .supported {
+        color: green;
+      }
+
+      .unsupported {
+        color: red;
+      }
+
+      /* Encodings */
+      .encodings {
+        margin-top: 10px;
+      }
+
+      .encodings strong {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+      }
+
+      .encoding {
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+
+      /* Content Area */
+      .content {
+        flex: 1;
+        padding: 10px;
+        background-color: #ffffff;
+        margin: 0;
+        width: 100%;
+    
+        overflow-y: auto;
+        box-sizing: border-box;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ccc;
+      }
+
+      .content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+
+      .content table,
+      .content th,
+      .content td {
+        border: 1px solid #bba9a9;
+      }
+
+      .content th {
+        background-color: #ddd;
+        color: #333;
+        text-align: center;
+        padding: 10px;
+      }
+
+      .content td {
+        background-color: #f5f5f5;
+        color: #333;
+        text-align: center;
+        padding: 10px;
+      }
+
+      /* Buttons */
+      .buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .buttons button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        color: white;
+        border-radius: 5px;
+        width: 120px;
+      }
+
+      .buttons button.pass {
+        background-color: #4caf50;
+      }
+
+      .buttons button.fail {
+        background-color: rgb(241, 97, 97);
+      }
+
+      .buttons button.other {
+        display: none;
+      }
+
+      .buttons button.active.pass,
+      .buttons button.active.fail,
+      .buttons button.active.other {
+        color: black;
+      }
+
+      /* Dropdown Menu */
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #ddd;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      /*  gNMI Output */
+      .gnmi-output {
+        width: auto; /* Fixed width */
+        height: auto; /* Fixed height */
+        max-height: 50%;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        white-space: normal; /* Preserve line breaks and prevent wrapping */
+        font-family: monospace;
+        margin-top: 10px;
+        /*overflow: auto; /* Enables both horizontal and vertical scrolling */
+        position: relative; /* Needed for absolute positioning of button */
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Ensure log content takes full width */
+      .gnmi-log-content {
+          /*white-space: pre-wrap; /* Preserve formatting and allow wrapping */
+          /*word-wrap: break-word;*/
+          flex-grow: 1; /* Allows it to expand fully while keeping the button fixed */
+          overflow: auto;
+      }
+
+      .gnmi-log-content pre {
+      white-space: pre;
+      word-wrap: normal;
+      overflow-x: auto;
+    }
+
+      /* Custom Checkbox */
+      .custom-checkbox {
+        position: relative;
+        width: 24px;
+        height: 24px;
+        margin: 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: transparent;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        font-weight: normal !important;
+        font-family: Arial, sans-serif !important;
+      }
+
+      .custom-checkbox::before {
+        content: "✖";
+        position: absolute;
+        top: 8px;
+        left: 0;
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+        line-height: 24px;
+        color: red;
+        text-align: center;
+        font-weight: normal !important;
+        font-family: Arial, sans-serif !important;
+      }
+
+      .custom-checkbox:checked::before {
+        content: "✔";
+        color: green;
+        font-weight: normal !important;
+        font-family: Arial, sans-serif !important;
+      }
+
+      /* Download Button */
+      .download-button {
+        padding: 5px 8px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        float: right;
+      }
+
+      .download-button:hover {
+        background-color: #45a049;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 32%;
+        background-color: #f5f5f5;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        /*max-height: calc(100vh - 80px);*/
+        overflow-y: auto;
+      }
+
+      .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .sidebar li:not(.folder-item) {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        overflow-x: hidden;
+        cursor: pointer;
+        align-items: center;
+        transition: background-color 0.2s ease;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        font-family: math;
+      }
+
+      .sidebar li:not(.folder-item):hover {
+        background-color: #ebe7e7;
+      }
+
+      .sidebar li.active {
+        background-color: #d1e7dd;
+      }
+
+      .sidebar li.pass {
+        color: #180202;
+      }
+
+      .sidebar li.fail {
+        color: #180202;
+      }
+
+      /* Sidebar Tooltip */
+      .sidebar li .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .sidebar li:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      /* Operation Cards */
+      .operation-cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+      }
+
+      .operation-card {
+        background-color: #ddd;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 15px;
+        width: 300px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        transition: border 0.3s, background-color 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+      }
+
+      .operation-card:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      }
+
+      .operation-card h3 {
+        margin-top: 18px;
+        font-size: 1.2em;
+        color: #333;
+      }
+
+      .operation-card p {
+        margin: 5px 0;
+        color: #555;
+      }
+
+      .operation-details {
+        margin-top: 10px;
+        background-color: #fff;
+        border-top: 1px solid #ddd;
+        padding-top: 10px;
+      }
+      .card-encoding {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    max-width: calc(100% - 20px); /* Prevent overflow */
+    justify-content: flex-end;
+  }
+
+  .card-encoding .badge {
+    flex-shrink: 0; /* Prevent badges from shrinking */
+    font-size: 0.75em;
+    padding: 4px 8px;
+    white-space: nowrap;
+  }
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .operation-card {
+          width: 100%;
+          max-height: 60vh;
+          position: relative; /* Needed for absolute positioning of encoding */
+    overflow: visible; /* Allow badges to overflow but stay contained */
+        }
+        .operation-cards-container {
+          flex-wrap: nowrap;
+          overflow-x: auto;
+        }
+      }
+
+      /* Scrollable Operation Cards Container */
+      .operation-cards-scrollable {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+      .operation-cards-scrollable:hover {
+        overflow-x: auto;
+      }
+
+      .operation-card.active {
+        background-color: #f9f9f9;
+      }
+
+      /* Dynamic Buttons */
+      .dynamic-button {
+        background-color: #ddd;
+        color: #333;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-transform: capitalize;
+        transition: all 0.2s ease-in-out;
+        min-width: 120px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .dynamic-button.pass {
+        /*background-color: green; */
+        color: white;
+      }
+
+      .dynamic-button.fail {
+        background-color: red;
+        color: white;
+      }
+
+      .dynamic-button.pending {
+        background-color: orange;
+        color: white;
+      }
+
+      .dynamic-button.active {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        transform: scale(1.05);
+        background-color: #70757c;
+        z-index: 1;
+      }
+
+      .dynamic-button:hover {
+        filter: brightness(90%);
+        transform: translateY(-2px);
+      }
+
+      /* Buttons Container (#buttonsContainer) */
+      #buttonsContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-top: 20px;
+        padding: 10px;
+      }
+
+      /* Folder Structure */
+      .folder-container {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .folder-root {
+        padding-left: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      /* Remove negative margins for even spacing */
+      .folder-item {
+        list-style: none;
+        margin: 5px 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Ensure folder headers use full width and include padding/border in the width */
+      .folder-header {
+        width: 100%;
+        box-sizing: border-box;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding: 5px 10px;
+        transition: background-color 0.2s ease;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      .folder-header:hover {
+        background-color: #eaeaea;
+      }
+      .folder-header.active .folder-name {
+        font-weight: bold;
+        color: black;
+      }
+      .folder-toggle-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+      }
+
+      .folder-toggle-icon i {
+        transition: transform 0.2s ease;
+      }
+
+      .folder-toggle-icon i.down {
+        transform: rotate(90deg);
+      }
+
+      .folder-name {
+        font-weight: normal;
+        white-space: break-spaces;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: black;
+      }
+
+      .folder-content {
+        margin-left: 20px;
+        margin-top: 5px;
+        padding-left: 0;
+        border-left: 2px dashed #e4e4e4;
+        box-sizing: border-box;
+      }
+
+      .folder-sublist {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      .section-header {
+        font-size: 12px;
+        font-weight: bold;
+        color: #6c757d;
+        text-transform: uppercase;
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+
+      /* Folder Name Colors (when inline style applied) */
+      .folder-name[style*="green"] {
+        color: green;
+      }
+
+      .folder-name[style*="red"] {
+        color: red;
+      }
+
+      .folder-name[style*="orange"] {
+        color: orange;
+      }
+
+      .h5,
+      h5 {
+        font-size: 1rem;
+        position: relative; /* allows absolute positioning of pseudo-element */
+        padding-bottom: 8px; /* adds space so line is below the text */
+      }
+
+      /* Compliance & Encoding inside Folder Structure */
+      .folder-sublist .folder-item {
+        margin-left: 10px;
+        padding: 5px;
+        box-sizing: border-box;
+      }
+
+      .folder-sublist .folder-header {
+        padding: 3px 8px;
+      }
+
+      .folder-sublist .folder-header:hover {
+        background-color: #f1f1f1;
+      }
+
+      /* Headings & Expand/Collapse Buttons */
+      .display-4 {
+        font-size: 25px;
+        position: absolute; /* Corrected from fixed to sticky */
+        top: 0; /* Stick to the top of the page */
+        left: 0;
+        width: 100%;
+        background: linear-gradient(135deg, rgb(209 209 209) 0%, rgb(144 122 122) 100%);
+        text-align: center;
+        z-index: 1000; /* Ensure it stays on top */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
+        padding: 2px;
+    }
+
+      #expandViewBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #676d67;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    }
+
+      #expandViewBtn:hover {
+          background-color: #ddd;
+      }
+
+      .expand-icon {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    font-size: 20px;
+    color: #676d67;
+    cursor: pointer;
+      }
+
+      .expand-icon:hover {
+          color: #000;
+      }
+
+
+
+
+      #expandAllBtn,
+      #collapseAllBtn {
+        background-color: #70757c;
+        border: none;
+        color: white;
+        padding: 6px 5px;
+        margin-right: 5px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 14px;
+        font-family: Arial, sans-serif;
+      }
+
+      #expandAllBtn:last-child {
+        margin-right: 0;
+      }
+
+      #expandAllBtn:hover,
+      #collapseAllBtn:hover {
+        background-color: #ddd;
+      }
+
+      #expandAllBtn:active,
+      #collapseAllBtn:active {
+        background-color: #004085;
+      }
+
+      .view-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        margin-bottom: 30px;
+        justify-content: right;
+      }
+
+      .view-buttons button {
+        padding: 5px 5px;
+        border: none;
+        border-radius: 10px;
+        background-color: #4c527a;
+        color: #faf9f9;
+        cursor: pointer;
+        font-size: 15px;
+        transition: background-color 0.3s ease;
+      }
+
+      .view-buttons button:hover {
+        background-color: #ddd;
+      }
+
+      .view-buttons button:focus {
+        outline: none;
+      }
+
+      .view-buttons button.active {
+        background-color: #39393d;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .folder-header.highlighted {
+        background-color: rgb(134, 196, 241);
+      }
+
+      .overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        pointer-events: none;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        border-radius: 4px;
+      }
+
+      /* Sidebar Active States */
+      .sidebar li.active.pass {
+        background-color: #eaeaea;
+      }
+
+      .sidebar li.active.fail {
+        background-color: #eaeaea;
+      }
+
+      .small-arrow {
+        font-size: 14px;
+      }
+
+      /* Tables Override */
+      .table {
+        background-color: #ffffff !important;
+        text-align: center;
+      }
+
+      .table th,
+      .table td {
+        background-color: #ffffff !important;
+        color: #333 !important;
+      }
+
+      .table tbody tr:nth-child(even) {
+        background-color: #fbf7f7 !important;
+      }
+
+      .table tbody tr:nth-child(odd) {
+        background-color: #fbf7f7 !important;
+      }
+      .tc-header {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #e7e5e5;
+        color: #333;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+
+      .operation-card ul {
+        padding-left: 0;
+        list-style: none;
+        margin: 0;
+      }
+
+      .operation-card li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div width="100%">
+      <header class="text-center text-white">
+        <br />
+        <h4 class="display-4">
+          Path Level Yang-GNMI Validator Report
+          <span class="small-arrow">&#9654;</span> {{heading}}
+        </h4>
+        <!--   <p class="h3" color="black">{{heading}}</p> -->
+      </header>
+      <br />
+      <div class="main-table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Total Tests</th>
+              <th scope="col">Passed Tests</th>
+              <th scope="col">Failed Tests</th>
+              <th scope="col">Total Validations</th>
+              <th scope="col">Passed Validations</th>
+              <th scope="col">Failed Validations</th>
+              <th scope="col">Ignored Validations</th>
+              <th scope="col">Result</th>
+            </tr>
+          </thead>
+          <tbody id="data-table-body">
+            <!-- Data row will be dynamically injected here -->
+          </tbody>
+        </table>
+      </div>
+      <!-- Main Container -->
+      <div class="container-main">
+        <div class="sidebar">
+          <!-- Search Box -->
+          <!-- input
+            type="text"
+            id="searchBox"
+            placeholder="Search..."
+            onkeyup="filterList()"
+          /-->
+          <!-- <button
+            class="download-button"
+            onclick="downloadExcel('{{json_filename}}')"
+          >
+            Export Data
+          </button> -->
+          <div class="view-buttons">
+            <button id="listViewBtn" class="active">List View</button>
+            <button id="treeViewBtn">Tree View</button>
+          </div>
+
+          <ul id="pathList" style="display: block">
+            <!-- Sidebar paths will be dynamically generated -->
+          </ul>
+          <!-- collapsible menu -->
+          <div
+            class="container mt-4"
+            id="treeViewContainer"
+            style="display: none"
+          >
+            <div id="collapseContainer"></div>
+          </div>
+        </div>
+        <div class="content">
+          <!-- Operation Cards Container -->
+          <div class="operation-cards-container" id="operationCardsContainer">
+            <!-- Operation cards will be dynamically generated here -->
+          </div>
+          <div class="tc-header"></div>
+
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th class="fixed-width">Result</th>
+                <th class="fixed-width">Platform</th>
+                <th class="fixed-width">Deviation</th>
+              </tr>
+            </thead>
+            <tbody id="resultTable">
+              <!-- Result rows will be dynamically generated -->
+            </tbody>
+          </table>
+          <div class="individual-summary">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Passed Validations</th>
+                  <th scope="col">Failed Validations</th>
+                  <th scope="col">Ignored Validations</th>
+                  <th scope="col">Total Validations</th>
+                  <th scope="col">Coverage</th>
+                </tr>
+              </thead>
+              <tbody id="individual-data-table-body">
+                <!-- Data row will be dynamically injected here -->
+              </tbody>
+            </table>
+          </div>
+          <div class="compliance-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Compliance</th>
+                  <th>Status</th>
+                  <th>Messages</th>
+                </tr>
+              </thead>
+              <tbody id="compliance">
+                <!-- Compliance entries will show up here -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="buttonsContainer">
+            <!-- Buttons of different log will appear here -->
+          </div>
+          <div class="gnmi-output" id="gnmiOutput">
+            <!-- gNMI output will be dynamically generated -->
+            <button id="expandViewBtn" onclick="openExpandedView()">Expand View</button>
+          </div>
+        </div>
+        <div class="overlay" style="display: none">Not Tested by User</div>
+      </div>
+    </div>
+
+    <script>
+          const data = {{data}};
+          const treeData = {{treeData}};
+          console.log(data)
+
+          let currentPath = Object.keys(data)[0];
+          function isFullPath(path) {
+          // Trim any whitespace just in case
+          path = path.trim();
+
+          // Special case: if the path is exactly "/system"
+          if (path.startsWith("/system ->")) {
+          return true;
+          }
+
+          // Otherwise, apply your existing rule about the minimum parts count
+          const parts = path.split("/").filter(Boolean);
+          return parts;
+          }
+
+
+          function generateSidebar() {
+          const pathList = document.getElementById('pathList');
+          pathList.innerHTML = '';
+
+          let counter = 0; // Counter for numbering
+          Object.keys(data).forEach((path, index) => {
+          parts = isFullPath(path);
+          isMultiple = data[path]['multiple_data'] ? true : false;
+          const li = document.createElement('li');
+
+          if (data[path]['status'] && parts) {
+          counter++; // Increment the counter only for valid items
+          let displayPath = path.includes('->') ? path.split('->')[0].trim() : path;
+          li.textContent = `${counter}. ${displayPath}`;
+          li.style.position = "relative"; // Needed for absolute positioning of status bar
+          li.style.paddingRight = "15px"; // Add some space for the bar
+
+          const status = data[path]['status']['status'];
+
+          // Create a status indicator (small vertical bar)
+          const statusIndicator = document.createElement('div');
+          statusIndicator.style.position = "absolute";
+          statusIndicator.style.left = "0"; // Stick to the right
+          statusIndicator.style.top = "0";
+          statusIndicator.style.width = "5px"; // Narrow bar
+          statusIndicator.style.height = "100%"; // Full height of the item
+          statusIndicator.style.borderRadius = "1px";
+
+          if (status.includes('PASS')) {
+          li.classList.add('pass');
+          statusIndicator.style.backgroundColor = 'green';
+          } else if (status.includes('FAIL')) {
+          li.classList.add('fail');
+          statusIndicator.style.backgroundColor = 'red';
+          }
+
+          li.appendChild(statusIndicator); // Append the colored bar to the list item
+
+          li.addEventListener('click', () => {
+          document.querySelectorAll('.sidebar li').forEach(item => item.classList.remove('active'));
+          li.classList.add('active');
+          currentPath = path;
+          populateIndividualSummaryTable(data, currentPath, 'ONCE', isMultiple);
+          generateReport(path, 'ONCE', isMultiple);
+          generateOperationCards(path);
+          });
+
+          pathList.appendChild(li);
+
+          if (path === currentPath) {
+          li.classList.add('active');
+          generateOperationCards(path); // Generate operation cards for the initially active path
+          }
+          }
+          });
+          }
+          function renderTextInHeader(text) {
+        // Find the header element by its class name
+        const header = document.querySelector('.tc-header');
+
+        // Check if the element exists
+        if (header) {
+          header.textContent = text;
+        } else {
+          console.error("Element with class 'tc-header' not found.");
+        }
+      }
+          function handleButtonClick(button, statusType, type) {
+          document.querySelectorAll('.buttons button').forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          generateReport(currentPath, statusType, type);
+          }
+
+          function handleDropdownClick(path, statusType, type, index) {
+          generateReport(path, statusType, type, index);
+          }
+
+          function createCheckbox(status) {
+
+          if (status === 'PASS') {
+          return `<input type="checkbox" class="custom-checkbox" checked disabled>`;
+          } else if (status === 'FAIL') {
+          return `<input type="checkbox" class="custom-checkbox" disabled>`;
+          } else if (status === 'NA' || status === 'SKIP' || status === 'N/A') {
+          return `
+          <span style="display: inline-block; width: 24px; height: 24px; font-size: 24px; line-height: 24px; text-align: center; color: orange;">&#8211;</span>
+          `;
+          }
+          return '';
+          }
+
+          // Helper function to determine color based on value
+          function getStatusColor(value) {
+          if (typeof value !== 'string') return ''; // Return no color if value is not string
+          const normalizedValue = value.toUpperCase();
+          if (normalizedValue === 'PASS') return 'green';
+          if (normalizedValue === 'FAIL') return 'red';
+          return 'orange'; // Default for all other cases
+          }
+            function populateIndividualSummaryTable(dataObj, path, statusType, isMultiple) {
+                    const tableBody = document.getElementById("individual-data-table-body");
+                    tableBody.innerHTML = "";
+
+                    // Safely access data based on the isMultiple flag
+                    const summaryData = isMultiple
+                      ? dataObj[path]['multiple_data'][statusType]
+                      : dataObj[path][statusType];
+
+                    if (!summaryData) {
+                      console.log(`No summary data for path=${path}, statusType=${statusType}`);
+                      return;
+                    }
+
+                    // Create a new table row
+                    const row = document.createElement("tr");
+
+                    // Helper function to safely retrieve and format cell data
+                    function getCellValue(field) {
+                      if (summaryData.status === "NA") {
+                        return "NA";
+                      } else {
+                        const value = summaryData[field];
+                        return value === "NA" ? 0 : value;
+                      }
+                    }
+
+                    // Populate the row with table data cells
+                    row.innerHTML = `
+                      <td>${getCellValue('passed_validations')}</td>
+                      <td>${getCellValue('failed_validations')}</td>
+                      <td>${getCellValue('ignored_validations')}</td>
+                      <td>${getCellValue('total_validations')}</td>
+                      <td>${getCellValue('coverage')}</td>
+                    `;
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                  }
+
+                  function generateReport(path, statusType, type, ismultiple, index = 0 ) {
+
+                    const resultTable = document.getElementById('resultTable');
+                    const gnmiOutputDiv = document.getElementById('gnmiOutput');
+                    const complianceResult = document.getElementById('compliance');
+
+                    // Safely access data based on the ismultiple flag
+                    const statusData = ismultiple
+                      ? data[path]['multiple_data'][statusType]
+                      : data[path][statusType];
+
+                    if (!statusData) {
+                      console.warn('No data found for path and statusType:', path, statusType);
+                      return;
+                    }
+
+                    let status = 'N/A';
+                      if (statusData.results && statusData.results.length > 0) {
+                        status = statusData.results[0].result;
+                      }
+
+                    resultTable.innerHTML = '';
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                      <td class="fixed-width" style="color: ${getStatusColor(statusData['status'])} !important; font-weight: bold;">
+                        ${statusData['status'] || 'N/A'}
+                      </td>
+                      <td class="fixed-width">${data[path]?.platform?.status || 'N/A'}</td>
+                      <td class="fixed-width">${data[path]?.deviation?.status || 'N/A'}</td>
+                    `;
+                    resultTable.appendChild(row);
+
+                    complianceResult.innerHTML = '';
+                    const complianceLength = statusData.Compliance.length; // Length of compliance
+
+                    for (let i = 0; i < complianceLength; i++) {
+                      let newRow = document.createElement('tr');
+
+                      // Access the current compliance object
+                      let complianceItem = statusData.Compliance[i];
+
+                      // Get the key (e.g., "Status_Code", "Schema_Compliance", etc.)
+                      let complianceKey = Object.keys(complianceItem)[0]; // Assuming there's only one key per item in the compliance array
+
+                      // Get the value for the key (it can be an array or a primitive value)
+                      let complianceValue = complianceItem[complianceKey];
+
+                      // If it's an array (like ["PASS", "message"]), we may want to show the first value
+                      let complianceValueDisplay = Array.isArray(complianceValue) ? complianceValue[0] : complianceValue;
+                      let complianceMessageDisplay = Array.isArray(complianceValue) ? complianceValue[1] : "";
+
+                      newRow.innerHTML = `
+                        <td>${complianceKey + ': ' + complianceItem['description']}</td>
+                        <td style="color: ${getStatusColor(complianceValueDisplay === null ? 'SKIP' : complianceValueDisplay)}; font-weight: bold;">
+                          ${complianceValueDisplay === null ? 'SKIP' : complianceValueDisplay}
+                        </td>
+                        <td>${complianceMessageDisplay}</td> <!-- Empty cell instead of checkbox -->
+                      `;
+
+                      // Append the new row to the complianceResult table
+                      complianceResult.appendChild(newRow);
+                    }
+
+                    function getTheLogData(val = 'log') {
+                      let logMessage = "No log available";
+                      let title = 'LOG'
+                      if (val === 'log' && data[path][statusType]["log"]) {
+                          logMessage = convertLogToHTML(data[path][statusType]["log"]);
+                          title = 'LOG'
+                      } else if (val === 'gnmi_log' && data[path][statusType]["new_log"]["data"]) {
+                          logMessage = convertLogToHTML(data[path][statusType]["new_log"]["data"]);
+                          title = 'Complete LOG'
+                      }
+
+                      // Ensure proper alignment and formatting
+                      gnmiOutputDiv.innerHTML = `
+                          <i id="expandViewIcon" class="bi bi-arrows-fullscreen expand-icon" title="Expand View"></i>
+                          <div class="gnmi-log-content">
+                              <strong><br>${title}:</strong><br>
+                              <pre>${logMessage}</pre>
+                          </div>
+                      `;
+
+                      // Attach event listener to the new icon after updating the DOM
+                      document.getElementById("expandViewIcon").addEventListener("click", function () {
+                          openExpandedView(document.getElementById('logButton')?.classList.contains('active') ? 'log' : 'complete_log');
+                      });
+                  }
+
+                    getTheLogData();
+
+                    // Define your buttons HTML as a static string
+                              // Always add the "Log" button
+      let buttonsHTML = `<button id="logButton" class="dynamic-button">Message</button>`;
+
+      // If data[path][statusType]["new_log"]["data"] is defined, also append the "Log File" button
+      if (data[path][statusType]["new_log"]["data"] !== undefined) {
+        buttonsHTML += `<button id="gnmiLogButton" class="dynamic-button">Complete Log</button>`;
+      }
+
+
+                    // Insert the buttons into the container once
+                    document.getElementById('buttonsContainer').innerHTML = buttonsHTML;
+
+                    // Highlight active buttons
+                    function setActiveButton(clickedButtonId) {
+                      document.querySelectorAll('.dynamic-button').forEach(button => {
+                        button.classList.remove('active');
+                      });
+                      document.getElementById(clickedButtonId).classList.add('active');
+                    }
+
+                    // Add button event listeners for Message (Log Report)
+                    document.getElementById('logButton').addEventListener('click', function () {
+                      setActiveButton('logButton');
+                      getTheLogData('log');
+                      //openExpandedView("log"); // Opens Log Report
+                    });
+
+                    if (data[path][statusType]["new_log"]["data"] !== undefined) {
+                    document.getElementById('gnmiLogButton').addEventListener('click', function () {
+                      setActiveButton('gnmiLogButton');
+                      getTheLogData('gnmi_log');
+                      // openExpandedView("complete_log"); // Opens Complete Log Report
+                    });
+                  }
+
+                    // document.getElementById('testLogButton').addEventListener('click', function () {
+                    //   setActiveButton('testLogButton');
+                    //   getTheLogData('test_log');
+                    // });
+
+                    // Highlight the first button by default
+                    setActiveButton('logButton');
+                    updateButtonColors(path, statusType);
+                    // populateDropdowns(path);
+                    // Function to populate table with summary data
+                  }
+
+
+                                          function updateButtonColors(path, activeStatusType) {
+                                            const buttons = document.querySelectorAll('.buttons button');
+                                            buttons.forEach(button => {
+                                              button.classList.remove('pass', 'fail', 'other', 'active');
+                                              const statusType = button.id.replace('Btn', '_status');
+                                              const results = data[path][statusType];
+
+                                              // Check if all results are NA
+                                              const isAllNA = results.every(result => result.status === 'NA');
+                                              // Check if any result is FAIL
+                                              const isAnyFail = results.some(result => result.status.includes('FAIL'));
+
+                                              if (isAllNA) {
+                                                button.classList.add('other');
+                                              } else if (isAnyFail) {
+                                                button.classList.add('fail');
+                                              } else {
+                                                button.classList.add('pass');
+                                              }
+
+                                              if (statusType === activeStatusType) {
+                                                button.classList.add('active');
+                                                if (isAllNA) {
+                                                  button.classList.add('active', 'other');
+                                                } else if (isAnyFail) {
+                                                  button.classList.add('active', 'fail');
+                                                } else {
+                                                  button.classList.add('active', 'pass');
+                                                }
+                                              }
+                                            });
+                                          }
+
+                                          function formatLogMessage(logMessage, title) {
+                                            logMessage = logMessage.replace(/\n/g, "<br />");
+                                            return `<strong>${title}:</strong><pre>${logMessage}</pre>`;
+                                          }
+
+                                          function generateOperationCards(path) {
+                                            const preferredOrder = ['update', 'delete', 'get', 'replace', 'subscribe'];
+                    const operationCardsContainer = document.getElementById('operationCardsContainer');
+                    operationCardsContainer.innerHTML = ''; // Clear existing cards
+
+                    // Add the scrolling class to the container
+                    operationCardsContainer.classList.add('operation-cards-scrollable');
+
+                    // Access the data at the given path
+                    const pathData = data[path];
+
+                    // Define the keys to exclude
+                    const excludedKeys = ['test_name', 'deviation', 'platform', 'status', 'summary','new_log', 'full_path']; // Removed 'multiple_data' from excludedKeys
+
+                    // **Added Logic Start**
+                    // Initialize arrays to hold keys from multiple_data and regular keys
+                    let multipleDataKeys = [];
+                    let regularKeys = [];
+
+                    // Check if 'multiple_data' exists in pathData
+                    if (pathData.hasOwnProperty('multiple_data') && typeof pathData['multiple_data'] === 'object') {
+                      multipleDataKeys = Object.keys(pathData['multiple_data']);
+                    }
+
+                    // Get regular keys excluding the excludedKeys and 'multiple_data'
+                    regularKeys = Object.keys(pathData).filter(key => !excludedKeys.includes(key) && key !== 'multiple_data');
+
+                    // Combine keys: first multiple_data keys, then regular keys
+                    // Combine and prioritize 'update' and 'delete' operations first
+                  const allOperations = [
+                    ...multipleDataKeys.map(key => ({ key, isMultiple: true })),
+                    ...regularKeys.map(key => ({ key, isMultiple: false }))
+                  ];
+
+                  // Move 'update' and 'delete' to the top
+                  const prioritizedOrder = ['update', 'delete']; // Customize if needed
+                  const prioritized = [];
+                  const others = [];
+
+                  allOperations.forEach(op => {
+                    const baseKey = op.key.toLowerCase();
+                    if (prioritizedOrder.includes(baseKey)) {
+                      prioritized.push(op);
+                    } else {
+                      others.push(op);
+                    }
+                  });
+
+          const allKeys = [...prioritized, ...others];
+
+                    // **Added Logic End**
+
+                    // Sort allKeys so that operations with compliance data come first
+                    allKeys.sort((a, b) => {
+                    const aIndex = preferredOrder.indexOf(a.key.toLowerCase());
+                    const bIndex = preferredOrder.indexOf(b.key.toLowerCase());
+
+                    // Items not in preferredOrder get a large index
+                    return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+                  });
+
+
+                    // Track the first PASS and FAIL cards for default selection (when data exists)
+                    let firstPassCard = null;
+                    let firstFailCard = null;
+
+                    // Iterate over each key in the sorted allKeys array
+                    allKeys.forEach(({ key, isMultiple }) => {
+                      // **Modified Logic Start**
+                      // Determine the operation object based on whether it's multiple_data or not
+                      const operation = isMultiple ? pathData['multiple_data'][key] : pathData[key];
+                      // **Modified Logic End**
+
+                      const status = operation.status || 'PENDING';
+
+                      // Create a new card element
+                      const card = document.createElement('div');
+                      card.classList.add('operation-card');
+
+                      // Generate Encoding Details
+                      let encodingDetails = '';
+                      if (operation.encoding && Array.isArray(operation.encoding)) {
+                        encodingDetails = operation.encoding.map(item => {
+                          const [compType, compValue] = Object.entries(item)[0];
+                          return `
+                            <span class="badge badge-dark">
+                              ${compValue}
+                            </span>`;
+                        }).join('');
+                      } else {
+                        encodingDetails = '<span class="badge badge-light">No Encoding Data</span>';
+                      }
+
+                      // Check whether compliance data is available
+                      const hasComplianceArray = Array.isArray(operation.Compliance);
+                      const isDataAvailable = hasComplianceArray && operation.Compliance.length !== 0;
+
+                      // Generate Compliance Details
+                      let complianceDetails = '';
+                      if (isDataAvailable) {
+                        complianceDetails = operation.Compliance.map(item => {
+                          const [compType, compValue] = Object.entries(item)[0];
+                          const displayValue = Array.isArray(compValue) ? compValue[0] : compValue;
+                          const safeDisplayValue = displayValue !== null && displayValue !== undefined ? displayValue : 'N/A';
+                          const colorStyle = getStatusColor(safeDisplayValue);
+
+                          return `
+                            <li style="list-style: none;">
+                              ${createCheckbox(safeDisplayValue)}
+                              <span style="color:${colorStyle};">
+                                ${compType.replace(/_/g, ' ')}
+                              </span>
+                            </li>
+                          `;
+                        }).join('');
+                      } else {
+                        // No compliance data => show icon instead
+                        complianceDetails = `
+                          <i class="bi bi-x-circle"
+                            style="font-size: 35px; color: #bdbdbd; margin-top: 35px; margin-left: 75px;">
+                          </i>
+                          <br>
+                          <br>
+                          <br>
+                          <h5 style="margin-left:-15px" >Not Tested by User</h5>
+                        `;
+                      }
+
+                      // Add content to the card
+                      new_key = key.includes('_') ? key.split('_')[0] : key
+                      testname = pathData['test_name'].startsWith("Sets") ? "Set" + pathData['test_name'].slice(4) : pathData['test_name']
+                      card.innerHTML = `
+                        <div class="card-encoding" style="position: absolute; top: 10px; left: 10px;">
+                          ${encodingDetails}
+                        </div>
+                        <h3>${testname + ' ' + new_key}</h3>
+                        <ul>
+                          ${complianceDetails}
+                        </ul>
+                      `;
+
+                      // Apply inline styles to the card
+                      card.style.position = 'relative'; // Ensure the encoding is positioned relative to the card
+                      card.style.padding = '20px';      // Add padding to avoid overlap with the encoding badge
+                      card.style.borderTop = `6px solid ${getStatusColor(status)}`;
+                      card.style.borderRadius = '5px';  // Optional: Add rounded corners
+
+                      // If data is available, make the card clickable; otherwise, disable clicks
+                      if (isDataAvailable) {
+                        card.addEventListener('click', () => {
+                          // Remove 'active' class from all cards
+                          document.querySelectorAll('.operation-card').forEach(c => c.classList.remove('active'));
+
+                          // Add 'active' class to the clicked card (highlight)
+                          card.classList.add('active');
+
+                          // Call the report generation and summary population functions
+                          generateReport(path, key, status, isMultiple);
+                          populateIndividualSummaryTable(data, path, key,isMultiple);
+                          renderTextInHeader(data[path][key]['full_path']);
+                        });
+
+                        // Track the first PASS and FAIL card for default selection
+                        if (status === 'PASS' && !firstPassCard) {
+                          firstPassCard = card;
+                        } else if (status === 'FAIL' && !firstFailCard) {
+                          firstFailCard = card;
+                        }
+                      } else {
+                        // Visually indicate the card is not clickable
+                        card.style.cursor = 'not-allowed';
+                      }
+
+                      // Append the card to the container
+                      operationCardsContainer.appendChild(card);
+                    });
+
+                    // Handle the case where no operations are available after filtering
+                    // **Modified Logic Start**
+                    const hasMultipleData = multipleDataKeys.length > 0;
+                    const hasRegularData = regularKeys.length > 0;
+
+                    if (!hasMultipleData && !hasRegularData) {
+                      operationCardsContainer.innerHTML = '<p>No operations available for this path.</p>';
+                    }
+                    // **Modified Logic End**
+
+                    // Automatically click the first PASS or FAIL card by default (only if data is available)
+                    const overallPathStatus = data[path].status && data[path].status.status
+  ? data[path].status.status.toUpperCase() 
+  : '';
+
+                    // Auto-select the appropriate card based on the overall path status:
+                    if (overallPathStatus.includes('PASS') && firstPassCard) {
+                      // If the overall path status is passing, select a passing operation card.
+                      firstPassCard.classList.add('active');
+                      firstPassCard.click();
+                    } else if (overallPathStatus.includes('FAIL') && firstFailCard) {
+                      // If the overall path status is failing, select a failing operation card.
+                      firstFailCard.classList.add('active');
+                      firstFailCard.click();
+                    } else if (firstPassCard) {
+                      // Fallback: if no overall status is available but a pass card exists, click it.
+                      firstPassCard.classList.add('active');
+                      firstPassCard.click();
+                    } else if (firstFailCard) {
+                      // Fallback: if no pass card exists, click the failed card.
+                      firstFailCard.classList.add('active');
+                      firstFailCard.click();
+                    }
+                  }
+
+
+                                          document.addEventListener('DOMContentLoaded', function () {
+                                            console.log('Data:', data); // Log data object to verify its structure
+                                            console.log('Tree Date:', treeData);
+                                            document.querySelector('.overlay').style.display = 'none';
+                                            generateSidebar();
+                                            generateReport(currentPath, 'ONCE');
+                                            generateOperationCards(currentPath); // Generate operation cards for the initially active path
+                                            // populateIndividualSummaryTable(data, currentPath, 'ONCE', false);
+                                          });
+
+                                          function filterList() {
+                                            // const input = document.getElementById('searchBox');
+                                            const filter = input.value.toLowerCase();
+                                            const ul = document.getElementById('pathList');
+                                            const li = ul.getElementsByTagName('li');
+
+                                            for (let i = 0; i < li.length; i++) {
+                                              const text = li[i].textContent || li[i].innerText;
+                                              if (text.toLowerCase().includes(filter)) {
+                                                li[i].style.display = "";
+                                              } else {
+                                                li[i].style.display = "none";
+                                              }
+                                            }
+                                          }
+
+                                          // Function to split text into chunks
+                                          function splitTextIntoChunks(text, maxLength) {
+                                            var chunks = [];
+                                            for (var i = 0; i < text.length; i += maxLength) {
+                                              chunks.push(text.substring(i, i + maxLength));
+                                            }
+                                            return chunks;
+                                          }
+
+                                          // Function to process the data into a grouped structure for Excel export
+                                          function processDataForExcel(data) {
+                                            var processedData = [];
+                                            var maxTextLength = 32000; // Excel cell character limit
+
+                                            // Set to keep track of dynamically added headers
+                                            var additionalHeaders = new Set();
+
+                                            // Iterate over each key in the data object (each 'Path')
+                                            for (var path in data) {
+                                              if (data.hasOwnProperty(path)) {
+                                                var item = data[path];
+                                                var statusTypes = ["set_status", "get_status", "delete_status", "subscribe_status", "replace_status"];
+
+                                                // Array to hold rows for this 'Path'
+                                                var pathRows = [];
+
+                                                statusTypes.forEach(function (statusType) {
+                                                  if (item[statusType] && Array.isArray(item[statusType])) {
+                                                    item[statusType].forEach(function (statusItem) {
+                                                      var row = {
+                                                        'Operation': statusType,
+                                                        'Status': statusItem.status || '',
+                                                        'Compliance': JSON.stringify(statusItem.compliance || {}),
+                                                        'Deviation Status': item.deviation ? item.deviation.status : '',
+                                                        'Platform Status': item.platform ? item.platform.status : '',
+                                                        'Overall Status': item.status ? item.status.status : ''
+                                                      };
+
+                                                      // Handle 'Message' field
+                                                      var message = statusItem.message || '';
+                                                      if (message.length > 0) {
+                                                        var messageChunks = splitTextIntoChunks(message, maxTextLength);
+
+                                                        messageChunks.forEach(function (chunk, index) {
+                                                          var key = index === 0 ? 'Message' : 'Message_Part_' + (index + 1);
+                                                          row[key] = chunk;
+                                                          if (index > 0) {
+                                                            additionalHeaders.add(key);
+                                                          }
+                                                        });
+                                                      }
+
+                                                      // Handle 'Log' field
+                                                      var log = statusItem.log || '';
+                                                      if (log.length > 0) {
+                                                        var logChunks = splitTextIntoChunks(log, maxTextLength);
+
+                                                        logChunks.forEach(function (chunk, index) {
+                                                          var key = index === 0 ? 'Log' : 'Log_Part_' + (index + 1);
+                                                          row[key] = chunk;
+                                                          if (index > 0) {
+                                                            additionalHeaders.add(key);
+                                                          }
+                                                        });
+                                                      }
+
+                                                      pathRows.push(row);
+                                                    });
+                                                  }
+                                                });
+
+                                                // Add the 'Path' header and its rows to the processed data
+                                                processedData.push({ 'Path': path }); // This will be used to create the merged cell
+                                                processedData = processedData.concat(pathRows);
+
+                                                // Add an empty row to separate each 'Path' table
+                                                processedData.push({});
+                                              }
+                                            }
+
+                                            // Sort additional headers for consistent ordering
+                                            var sortedAdditionalHeaders = Array.from(additionalHeaders).sort();
+
+                                            // Return both processedData and headers
+                                            return {
+                                              data: processedData,
+                                              additionalHeaders: sortedAdditionalHeaders
+                                            };
+                                          }
+
+                                          // Function to create and download the Excel file using ExcelJS
+                                          async function downloadExcel(filename) {
+                                            // Removing the extension from the filename
+                                            let baseFilename = filename.substring(0, filename.lastIndexOf('.'));
+
+                                            // Process your JSON data into a flat array
+                                            var processed = processDataForExcel(data);
+                                            var processedData = processed.data;
+                                            var additionalHeaders = processed.additionalHeaders;
+
+                                            // Base headers
+                                            var headers = ['Operation', 'Status', 'Compliance', 'Deviation Status', 'Platform Status', 'Overall Status', 'Message', 'Log'];
+
+                                            // Include additional headers
+                                            headers = headers.concat(additionalHeaders);
+
+                                            // Create a new workbook and worksheet
+                                            var workbook = new ExcelJS.Workbook();
+                                            var worksheet = workbook.addWorksheet('Report');
+
+                                            // Define the starting row
+                                            var currentRow = 1;
+
+                                            // Iterate over the processed data
+                                            for (var i = 0; i < processedData.length; i++) {
+                                              var rowData = processedData[i];
+
+                                              if ('Path' in rowData) {
+                                                // This is a 'Path' header row
+                                                var path = rowData['Path'];
+
+                                                // Merge cells across all columns for the 'Path' header
+                                                worksheet.mergeCells(currentRow, 1, currentRow, headers.length);
+
+                                                // Set the value of the merged cell with background color
+                                                var cell = worksheet.getCell(currentRow, 1);
+                                                cell.value = path;
+                                                cell.font = { bold: true };
+                                                cell.alignment = { horizontal: 'left', vertical: 'middle' };
+                                                cell.fill = {
+                                                  type: 'pattern',
+                                                  pattern: 'solid',
+                                                  fgColor: { argb: 'FFC8AFF9' } // Purple background color
+                                                };
+
+                                                currentRow++;
+
+                                                // Insert headers after the 'Path' row
+                                                var headerRow = worksheet.getRow(currentRow);
+                                                for (var j = 0; j < headers.length; j++) {
+                                                  var cell = headerRow.getCell(j + 1);
+                                                  cell.value = headers[j];
+                                                  cell.font = { bold: true };
+                                                  cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                                                  cell.fill = {
+                                                    type: 'pattern',
+                                                    pattern: 'solid',
+                                                    fgColor: { argb: 'FFD9D9D9' } // Light gray background color
+                                                  };
+                                                  cell.border = {
+                                                    top: { style: 'thin' },
+                                                    left: { style: 'thin' },
+                                                    bottom: { style: 'thin' },
+                                                    right: { style: 'thin' }
+                                                  };
+                                                }
+                                                currentRow++;
+                                              } else if (Object.keys(rowData).length === 0) {
+                                                // Empty row to separate 'Path' tables
+                                                currentRow++;
+                                              } else {
+                                                // This is a data row
+                                                var dataRow = worksheet.getRow(currentRow);
+                                                for (var j = 0; j < headers.length; j++) {
+                                                  var header = headers[j];
+                                                  var cellValue = rowData[header] || '';
+                                                  var cell = dataRow.getCell(j + 1);
+                                                  cell.value = cellValue;
+                                                  cell.alignment = { wrapText: true, vertical: 'top' };
+                                                  cell.border = {
+                                                    top: { style: 'thin' },
+                                                    left: { style: 'thin' },
+                                                    bottom: { style: 'thin' },
+                                                    right: { style: 'thin' }
+                                                  };
+                                                }
+                                                currentRow++;
+                                              }
+                                            }
+
+                                            // Adjust column widths based on the content
+                                            worksheet.columns.forEach(function (column) {
+                                              let maxLength = 0;
+                                              column.eachCell({ includeEmpty: true }, function (cell) {
+                                                let columnLength = 10;
+                                                if (cell.value != null) {
+                                                  // Check if the cell value is an object (e.g., date, number)
+                                                  if (typeof cell.value === 'object' && cell.value.richText) {
+                                                    // If it's rich text, calculate the length accordingly
+                                                    columnLength = cell.value.richText.reduce((length, text) => length + text.text.length, 0);
+                                                  } else {
+                                                    columnLength = cell.value.toString().length;
+                                                  }
+                                                }
+                                                if (columnLength > maxLength) {
+                                                  maxLength = columnLength;
+                                                }
+                                              });
+                                              // Set the column width, adding some padding
+                                              column.width = maxLength < 20 ? 20 : maxLength + 2;
+                                            });
+
+                                            // Generate Excel file buffer
+                                            const buffer = await workbook.xlsx.writeBuffer();
+
+                                            // Save the Excel file using FileSaver.js
+                                            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), `results_technical_summary__${baseFilename}.xlsx`);
+                                          }
+    </script>
+
+    <script>
+      function getOverallStatusColor(data) {
+        const excludeKeys = [
+          "test_name",
+          "deviation",
+          "platform",
+          "status",
+          "summary",
+          "new_log",
+          "full_path",
+        ];
+        let anyFail = false;
+        let allPass = true;
+
+        // Iterate over top-level keys in the object
+        for (const [pathKey, pathValue] of Object.entries(data)) {
+          for (const [subKey, subObj] of Object.entries(pathValue)) {
+            // Skip keys we don't care about
+            if (excludeKeys.includes(subKey)) {
+              continue;
+            }
+
+            if (subObj && typeof subObj === "object" && subObj.status) {
+              // Ignore "NA"
+              if (subObj.status === "NA") {
+                continue;
+              }
+              if (subObj.status === "FAIL") {
+                anyFail = true;
+              }
+              if (subObj.status !== "PASS") {
+                allPass = false;
+              }
+            }
+          }
+        }
+
+        // If we found at least one FAIL, return red.
+        if (anyFail) {
+          return "red";
+        }
+        // If everything we found is PASS, return green.
+        if (allPass) {
+          return "green";
+        }
+        // Otherwise, return red (covers the case where there's no FAIL, but also not all are PASS).
+        return "orange";
+      }
+
+      function getResultColor(resultObj, excludeKeys) {
+        // Validate inputs
+        // If resultObj itself is "NA" (case-insensitive), return orange immediately.
+        if (typeof resultObj === "string" && resultObj.toLowerCase() === "na") {
+          return "orange";
+        }
+
+        if (
+          typeof resultObj !== "object" ||
+          resultObj === null ||
+          Array.isArray(resultObj)
+        ) {
+          throw new TypeError("First argument must be a non-null object.");
+        }
+        if (!Array.isArray(excludeKeys)) {
+          throw new TypeError("Second argument must be an array of strings.");
+        }
+
+        // Check the top-level status property first
+        if (typeof resultObj.status?.status === "string") {
+          const status = resultObj.status?.status.toLowerCase();
+          if (status === "na") {
+            return "orange"; // Keep the orange check: if status is NA, return orange.
+          }
+          if (status === "pass") {
+            return "green";
+          }
+          return "red";
+        }
+
+        // Fallback: if no top-level status, default to red.
+        return "red";
+      }
+
+      (function () {
+        // Original exclude keys
+        const excludeKeys = [
+          "test_name",
+          "deviation",
+          "platform",
+          "status",
+          "summary",
+        ];
+
+        // 1) Compute the overall color based on the entire "data" object
+        const overallColor = getResultColor(data, excludeKeys);
+
+        const createUniqueId = (prefix) => {
+          const timestamp = Date.now().toString(36); // Convert timestamp to base-36 string
+          const randomPart = Math.random().toString(36).substr(2, 9); // Generate a random string
+          return `${prefix}-${timestamp}-${randomPart}`;
+        };
+
+        /**
+         * Step 2: Recursively render the hierarchy.
+         * - Accepts an `isRoot` param so we know if we're at the top-level call.
+         * - Accepts `overallColor` so we can apply it only to the *first key* at the root.
+         * - NEW: Adds `currentPath` param to build the full path and store it in `data-full-path`.
+         */
+        const renderHierarchy = (
+          obj,
+          exclude = [],
+          overallColor = "",
+          isRoot = false,
+          currentPath = ""
+        ) => {
+          let html = "<ul class='folder-root'>";
+          let firstKey = true;
+
+          for (const key in obj) {
+            if (key === "_data" || key === "summary") continue; // skip special property
+
+            // Build the path for this node
+            // If we already have a `currentPath`, append `key`; otherwise, just `key`.
+            const thisPath = currentPath ? `${currentPath}/${key}` : `/${key}`;
+
+            const uniqueId = createUniqueId("folder");
+            const isLeaf =
+              obj[key]._data !== undefined &&
+              Object.keys(obj[key]).length === 1;
+
+            // ---- If top-level & first key -> color it based on overallColor ----
+            if (isRoot && firstKey) {
+              const mainValue = obj[key]._data;
+              const folderColor = getResultColor(mainValue, excludeKeys);
+              html += `
+                <li class="folder-item">
+                  <div class="folder-header"
+                  style="position: relative; padding-left: 10px;" 
+                       data-full-path="/${key}"
+                       data-bs-toggle="collapse"
+                       data-bs-target="#${uniqueId}"
+                       aria-expanded="false"
+                       aria-controls="${uniqueId}">
+                        <span class="status-line"
+        style="position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background-color: ${folderColor};"></span>
+                    <span class="folder-toggle-icon"><i class="bi bi-chevron-right rotate"></i></span>
+                    <!-- Apply the overallColor to the very first key -->
+                    <span class="folder-name">${key}</span>
+                  </div>
+              `;
+              firstKey = false;
+            }
+            // ---- Otherwise, normal folder/leaf logic ----
+            else if (isLeaf) {
+              const mainValue = obj[key]._data;
+              const folderColor = getResultColor(mainValue, excludeKeys);
+              html += `
+                <li class="folder-item">
+                  <div class="folder-header"
+                  style="position: relative; padding-left: 10px;" 
+                       data-full-path="/${key}"
+                       data-bs-toggle="collapse"
+                       data-bs-target="#${uniqueId}"
+                       aria-expanded="false"
+                       aria-controls="${uniqueId}">
+                        <span class="status-line"
+        style="position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background-color: ${folderColor};"></span>
+                    <span class="folder-toggle-icon"><i class="bi bi-chevron-right rotate"></i></span>
+                    <span class="folder-name">${key.replace(
+                      /\s*->.*$/,
+                      ""
+                    )}</span>
+                  </div>
+              `;
+            } else {
+              // Not a leaf, so a nested folder
+              const mainValue = obj[key]._data;
+              const folderColor = getResultColor(mainValue, excludeKeys);
+              html += `
+                <li class="folder-item">
+                  <div class="folder-header"
+                  style="position: relative; padding-left: 10px;" 
+                       data-full-path="/${key}"
+                       data-bs-toggle="collapse"
+                       data-bs-target="#${uniqueId}"
+                       aria-expanded="false"
+                       aria-controls="${uniqueId}">
+                        <span class="status-line"
+        style="position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background-color: ${folderColor};"></span>
+                    <span class="folder-toggle-icon"><i class="bi bi-chevron-right rotate"></i></span>
+                    <span class="folder-name">${key.replace(
+                      /\s*->.*$/,
+                      ""
+                    )}</span>
+                  </div>
+              `;
+            }
+
+            // ---- If not leaf, recursively render child folders ----
+            if (!isLeaf) {
+              html += `
+                <div class="collapse folder-content" id="${uniqueId}">
+                  ${renderHierarchy(
+                    obj[key],
+                    exclude,
+                    overallColor,
+                    false,
+                    thisPath
+                  )}
+                </div>
+              `;
+            } else {
+              // close out leaf
+              html += `
+                </li>
+              `;
+            }
+          }
+
+          html += "</ul>";
+          return html;
+        };
+
+        // 2) Build your tree
+        const hierarchicalData = treeData;
+
+        // 3) Render the HTML with isRoot = true, so the first item is highlighted
+        const container = document.getElementById("collapseContainer");
+        container.classList.add("folder-container");
+
+        // Create a main collapse area
+        // (No color here for "Model - Openconfig-System",
+        //  because you said you don't want color applied at that level.)
+        const mainCollapseId = createUniqueId("mainCollapse");
+        container.innerHTML = `
+          <div class="folder-header"
+               data-bs-toggle="collapse"
+               data-bs-target="#${mainCollapseId}"
+               aria-expanded="false"
+               aria-controls="${mainCollapseId}">
+            <span class="folder-toggle-icon"><i class="bi bi-chevron-right rotate"></i></span>
+            <span class="folder-name"></span> {{heading}}
+
+          </div>
+          <div class="collapse folder-content" id="${mainCollapseId}">
+            ${renderHierarchy(
+              hierarchicalData,
+              excludeKeys,
+              overallColor,
+              true
+            )}
+          </div>
+        `;
+
+        // Add Expand All / Collapse All buttons
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.style.marginBottom = "10px";
+        buttonsContainer.innerHTML = `
+          <button id="expandAllBtn">+ Expand All</button>
+          <button id="collapseAllBtn">- Collapse All</button>
+        `;
+        container.parentNode.insertBefore(buttonsContainer, container);
+
+        // ================================
+        //   ON-CLICK: get the FULL PATH
+        // ================================
+        container.addEventListener("click", (event) => {
+          // Find the closest .folder-header element that was clicked
+          const header = event.target.closest(".folder-header");
+          if (header) {
+            // NOTE: We removed the code that was clearing or adding highlighting classes/styles.
+
+            // Retrieve the full path from the data-full-path attribute
+            const fullPath = header.dataset.fullPath;
+            let matchedKey = null;
+            if (fullPath.includes(" -> ")) {
+              // Look for a key that starts with fullPath
+              matchedKey = Object.keys(data).find((key) =>
+                key.startsWith(fullPath)
+              );
+            } else {
+              // Fallback logic: Find a key that includes fullPath with the separator
+              matchedKey = Object.keys(data).find((key) =>
+                key.includes(fullPath + " -> ")
+              );
+            }
+
+            // If no matching key is found, default to fullPath.
+            if (!matchedKey) {
+              matchedKey = fullPath;
+            }
+
+            // Process the matched data (report generation, etc.) without changing highlighting.
+            if (data[matchedKey]) {
+              generateReport(matchedKey, "ONCE");
+              populateIndividualSummaryTable(data, matchedKey, "ONCE");
+              generateOperationCards(matchedKey);
+              document.querySelector(".overlay").style.display = "none";
+              document
+                .querySelectorAll(".content > *")
+                .forEach((el) => (el.style.filter = ""));
+            } else {
+              document
+                .querySelectorAll(".content > *")
+                .forEach((el) => (el.style.filter = "blur(5px)"));
+              document.querySelector(".overlay").style.display = "block";
+            }
+
+            // Toggle the arrow icon if present
+            const icon = header.querySelector(".rotate");
+            if (icon) icon.classList.toggle("down");
+          }
+        });
+
+        // Expand All
+        document
+          .getElementById("expandAllBtn")
+          .addEventListener("click", () => {
+            const allCollapses = container.querySelectorAll(".collapse");
+            allCollapses.forEach((collapse) => collapse.classList.add("show"));
+            const allIcons = container.querySelectorAll(".rotate");
+            allIcons.forEach((icon) => icon.classList.add("down"));
+          });
+
+        // Collapse All
+        document
+          .getElementById("collapseAllBtn")
+          .addEventListener("click", () => {
+            const allCollapses = container.querySelectorAll(".collapse");
+            allCollapses.forEach((collapse) =>
+              collapse.classList.remove("show")
+            );
+            const allIcons = container.querySelectorAll(".rotate");
+            allIcons.forEach((icon) => icon.classList.remove("down"));
+          });
+      })();
+
+      function toggleMenu(menuId) {
+        const menu = document.getElementById(menuId);
+        if (menu.style.display === "block") {
+          menu.style.display = "none";
+        } else {
+          menu.style.display = "block";
+        }
+      }
+    </script>
+    <script>
+      const listViewBtn = document.getElementById("listViewBtn");
+      const treeViewBtn = document.getElementById("treeViewBtn");
+      const pathList = document.getElementById("pathList");
+      const treeViewContainer = document.getElementById("treeViewContainer");
+
+      listViewBtn.addEventListener("click", function () {
+        const elementsToBlur = document.querySelectorAll(".content > *");
+        elementsToBlur.forEach((el) => (el.style.filter = ""));
+        document.querySelector(".overlay").style.display = "none";
+        listViewBtn.classList.add("active");
+        treeViewBtn.classList.remove("active");
+        pathList.style.display = "block";
+        treeViewContainer.style.display = "none";
+      });
+
+      treeViewBtn.addEventListener("click", function () {
+        treeViewBtn.classList.add("active");
+        listViewBtn.classList.remove("active");
+        pathList.style.display = "none";
+        treeViewContainer.style.display = "block";
+      });
+      // Function to populate table with summary data
+      function populateSummaryTable() {
+        const tableBody = document.getElementById("data-table-body");
+        let summaryData = data["summary"];
+        // Create a single row for summary data
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${summaryData.tests_total}</td>
+        <td>${summaryData.tests_pass}</td>
+        <td>${summaryData.tests_fail}</td>
+        <td>${summaryData.tests_total_validations}</td>
+        <td>${summaryData.tests_passed_validations}</td>
+        <td>${summaryData.tests_failed_validations}</td>
+        <td>${summaryData.tests_ignored_validations}</td>
+        <td style=color:${summaryData.tests_fail > 0 ? "red" : "green"}>${
+          summaryData.tests_fail > 0 ? "FAIL" : "PASS"
+        }</td>
+  
+    `;
+
+        tableBody.appendChild(row);
+      }
+
+      // Populate table on page load
+      document.addEventListener("DOMContentLoaded", populateSummaryTable);
+ 
+
+function openExpandedView() {
+  let logContainer = document.getElementById("gnmiOutput");
+  let logContentElement = logContainer.querySelector('.gnmi-log-content pre');
+
+  if (!logContentElement) {
+      alert("No log content available.");
+      return;
+  }
+
+  let logContent = logContentElement.innerHTML.trim(); // Get raw text
+
+  // **Fix indentation issues**
+  let lines = logContent.split("\n");
+
+  // Find the minimum indentation (leading spaces) for non-empty lines
+  let minIndent = Math.min(
+      ...lines.filter(line => line.trim() !== '') // Ignore empty lines
+              .map(line => line.match(/^(\s*)/)[1].length) // Count leading spaces
+  );
+
+  // Normalize all lines by removing the extra spaces while maintaining structure
+  let formattedLogContent = lines.map(line => line.slice(minIndent)).join("\n");
+
+  // Determine active log type (Message or Complete Log)
+  let logType = document.getElementById('logButton')?.classList.contains('active') ? 'log' : 'complete_log';
+  let title = logType === "log" ? "Log Report" : "Complete Log Report";
+
+  // Open a new tab
+  const newTab = window.open("", "_blank");
+  if (newTab) {
+    newTab.document.write(`
+        <html>
+            <head>
+              <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+                <title>${title}</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f5f5f5; }
+                    .log-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); overflow: auto; max-height: 90vh; }
+                    pre { white-space: pre-wrap; word-wrap: break-word; font-size: 14px; line-height: 1.5; margin: 0; padding: 10px; background-color: #f8f9fa; border-radius: 5px; border: 1px solid #ddd; font-family: monospace; }
+                </style>
+                <script>
+                  function openGNMIResponseInNewTab(id) {
+                    var content = document.getElementById(id).innerText;
+                    var newWindow = window.open("", "_blank");
+                    newWindow.document.write('<html><head><style>pre { white-space: pre-wrap; word-wrap: break-word; }</style></head><body><pre>' + content + '</pre></body></html>');
+                    newWindow.document.close();
+                  }
+                <\/script>
+            </head>
+            <body>
+                <h2>${title}</h2>
+                <div class="log-container">
+                    <pre id="logContent">${formattedLogContent}</pre>
+                </div>
+                
+            </body>
+        </html>
+    `);
+    newTab.document.close();
+} else {
+    alert("Popup blocked! Please allow popups for this site.");
+}
+} 
+
+    </script>
+      <script>
+       // --- Helper Functions ---
+
+// Escapes HTML special characters.
+function escapeHtml(str) {
+  if (!str) return "";
+  return str.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+}
+
+// Opens a GNMI response in a new tab.
+function openGNMIResponseInNewTab(id) {
+  const content = document.getElementById(id).innerText;
+  const newWindow = window.open("", "_blank");
+  newWindow.document.write(
+    `<pre style="background:#f8f9fa; border:1px solid #ccc; overflow-x:auto; white-space:pre-wrap; word-wrap:break-word; margin:0; border-radius:4px; font-size:0.9rem; max-width:100%;">${escapeHtml(content)}</pre>`
+  );
+  newWindow.document.close();
+}
+
+// --- ASCII Table & Collapsible Section Processing ---
+
+function removeBorderLines(asciiBlock) {
+  const lines = asciiBlock.trim().split("\n");
+  return lines.filter(line => !/^\+\s*(?:-+\s*\+)+$/.test(line.trim())).map(line => line.trim());
+}
+
+function extractAsciiRows(lines) {
+  return lines.filter(line => line.startsWith("|")).map(line => {
+    const trimmed = line.replace(/^\|/, "").replace(/\|$/, "");
+    return trimmed.split("|").map(cell => cell.trim());
+  });
+}
+
+function normalizeRows(rows) {
+  if (!rows.length) return rows;
+  const maxCols = Math.max(...rows.map(row => row.length));
+  rows.forEach(row => {
+    while (row.length < maxCols) {
+      row.push("");
+    }
+  });
+  const nonEmptyIndices = [];
+  for (let i = 0; i < maxCols; i++) {
+    if (rows.some(row => row[i] !== "")) {
+      nonEmptyIndices.push(i);
+    }
+  }
+  return rows.map(row => nonEmptyIndices.map(i => row[i]));
+}
+
+// Build an HTML table with inline CSS styling.
+function buildTableHTML(rows) {
+  const tableStyle = "border-collapse: collapse; margin: 10px 0; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: auto; margin-left: 10px;";
+  const cellStyle = "border: 1px solid #ddd; padding: 8px 12px; text-align: left; vertical-align: top; width: auto;";
+  let tableHTML = `<table style="${tableStyle}"><tbody>`;
+  rows.forEach((row, rowIndex) => {
+    // Even-indexed rows get a background.
+    const rowStyle = (rowIndex % 2 === 0)
+      ? "background: linear-gradient(to right, #e8edee, #e8edee);"
+      : "";
+    tableHTML += `<tr style="${rowStyle}">` + row.map(cell => `<td style="${cellStyle}">${cell}</td>`).join("") + `</tr>`;
+  });
+  tableHTML += "</tbody></table>";
+  return tableHTML;
+}
+
+// Build a collapsible section with inline CSS and an arrow span.
+function buildCollapsibleSection(title, content, after = "") {
+  const summaryStyle = "background-color: #e8edee; padding: 8px 12px; cursor: pointer; font-weight: bold; display: block; line-height: 1; margin: 0;";
+  const boxStyle = "background-color: #f8f9fa; width: 100%; max-height: 400px; overflow-y: scroll; border: 1px solid #ccc; font-size:0.9rem; margin: 0;";
+   // The arrow span uses inline styles with a transition.
+  return `<details style="margin:0; display: block; width:auto;">
+    <summary style="${summaryStyle}"><span style="display:inline-block; margin-right:8px; transition: transform 0.3s ease;" class="toggle-arrow">&#9656;</span>${title}</summary>
+    <div style="${boxStyle}">${content}</div>
+  </details><br>${after}`;
+}
+
+function cleanAsciiTable(asciiBlock) {
+  const cleanedLines = removeBorderLines(asciiBlock);
+  let rows = extractAsciiRows(cleanedLines);
+  if (!rows.length) return asciiBlock;
+  const allSubtables = [];
+  let currentTable = [];
+  let prevCols = null;
+  rows.forEach(row => {
+    const numCols = row.length;
+    if (prevCols !== null && numCols !== prevCols) {
+      allSubtables.push(currentTable);
+      currentTable = [row];
+    } else {
+      currentTable.push(row);
+    }
+    prevCols = numCols;
+  });
+  if (currentTable.length) {
+    allSubtables.push(currentTable);
+  }
+  const finalHtmlChunks = [];
+  allSubtables.forEach(subtableRows => {
+    subtableRows = subtableRows.filter(r => r.some(cell => cell));
+    if (!subtableRows.length) return;
+    subtableRows = normalizeRows(subtableRows);
+    finalHtmlChunks.push(buildTableHTML(subtableRows));
+  });
+  return finalHtmlChunks.join("<br>");
+}
+
+function cleanFailedValidationTable(asciiBlock) {
+  asciiBlock = asciiBlock.split("\n")
+    .filter(line => !( /-{5,}/.test(line) && !/[A-Za-z0-9]/.test(line) ))
+    .join("\n");
+    
+  const cleanedLines = removeBorderLines(asciiBlock);
+  let rows = extractAsciiRows(cleanedLines);
+  
+  const mergedRows = [];
+  rows.forEach(row => {
+    if (mergedRows.length && row.length > 0 && row[0] === "") {
+      row.forEach((cell, i) => {
+        if (cell) {
+          if (i < mergedRows[mergedRows.length - 1].length) {
+            mergedRows[mergedRows.length - 1][i] += " " + cell;
+          } else {
+            mergedRows[mergedRows.length - 1].push(cell);
+          }
+        }
+      });
+    } else {
+      mergedRows.push(row);
+    }
+  });
+  rows = mergedRows.filter(row => row.some(cell => cell));
+  if (!rows.length) return asciiBlock;
+  rows = normalizeRows(rows);
+  return buildTableHTML(rows);
+}
+
+function convertSectionToHTML(content, title) {
+  const convertedContent = content.replace(/((?:^[+|].*(?:\n|$))+)/gm, (match) => cleanAsciiTable(match));
+  return buildCollapsibleSection(title, convertedContent);
+}
+
+function convertFailedValidationsToHTML(asciiBlock) {
+  const headerText = "View Failed Validations";
+  const convertedTable = cleanFailedValidationTable(asciiBlock);
+  return buildCollapsibleSection(headerText, convertedTable, '<br><div style="margin-top:15px; clear:both;"></div>');
+}
+
+// --- Process "Step ..." Block ---
+// This converts a block that starts with a Step instruction.
+// It uses the first row's first cell as the collapsible title and the remaining rows as the content.
+function convertStepSection(matchBlock) {
+  const rows = extractAsciiRows(removeBorderLines(matchBlock));
+  if (!rows.length) return matchBlock;
+  const title = rows[0][0];
+  let content = "";
+  if (rows.length > 1) {
+    const asciiContent = rows.slice(1).map(row => "| " + row.join(" | ") + " |").join("\n");
+    content = cleanAsciiTable(asciiContent);
+  }
+  return buildCollapsibleSection(title, content);
+}
+
+// --- Main Conversion Function with Inline CSS and Arrow Toggle ---
+let gnmiResponseCounter = 0;
+
+function convertLogToHTML(text) {
+  // Process GNMI response blocks.
+  text = text.replace(/\[GNMI RESPONSE\]([\s\S]*?)\[End of GNMI RESPONSE\]\n?/g, (match, responseContent) => {
+  const currentId = 'gnmi_response_' + (++gnmiResponseCounter);
+  const buttonHtml = `<div style="position:sticky; top:0; right:0; background:white; display:flex; justify-content:flex-end; cursor:pointer;  padding:15px; z-index:1000;">
+
+    <i id="expandViewIcon" class="bi bi-arrows-fullscreen expand-icon" onclick="openGNMIResponseInNewTab('${currentId}')" title="Expand View"></i>
+  </div>`;
+  const contentHtml = `${buttonHtml}<pre id="${currentId}" style="white-space:pre-wrap; word-wrap:break-word; margin:0; background:#f8f9fa; border:1px solid #ccc; overflow-x:auto; border-radius:4px; font-size:0.9rem; max-width:100%;">${escapeHtml(responseContent)}</pre>`;
+  return convertSectionToHTML(contentHtml, "View GNMI Response");
+});
+
+
+  // Process the "Step ..." block.
+  text = text.replace(/(\+[-]+\+\n\|\s*Step\s*\d+.*\n\+[-]+\+\n(?:\|.*\n)+\+[-]+\+)/gm, (match) => convertStepSection(match));
+
+   // Convert VALIDATIONS section.
+   text = text.replace(/(\+\-+\+\s*\n\|\s*VALIDATIONS\s*\|\s*\n\+\-+\+\s*\n)((?:^\s*\d+\).*(?:\r?\n|$))+)/gm,
+  (match, header, content) => convertSectionToHTML(content, "View Validations")
+);
+  
+  // Convert Coverage Mismatch Details.
+  text = text.replace(/(\+[-]+?\+\s*\| Coverage Mismatch Details \|\s*\+[-]+?\+\n)([\s\S]+?)(?=\n\+[-]+?\+\s*\| Additional Paths|$)/gm,
+    (match, header, content) => convertSectionToHTML(content, "View Coverage Mismatch Details")
+  );
+  
+  // Convert Additional Paths Found.
+  text = text.replace(/(\+[-]+?\+\s*\| Additional Paths Found.*?\|\s*\+[-]+?\+\n)([\s\S]+?)(?=\n\+[-]+?\+\s*\| TESTCASE RESULT\s*-)/gm,
+    (match, header, content) => convertSectionToHTML(content, "View Additional Paths Found")
+  );
+  
+  // Convert FAILED VALIDATIONS block.
+  text = text.replace(/(FAILED VALIDATIONS:\n)((?:[+|].*(?:\n|$))+)/gm,
+    (match, label, asciiBlock) => convertFailedValidationsToHTML(asciiBlock)
+  );
+  
+  // Convert Sample Interval Details.
+  text = text.replace(/((?:\+[-]+\+\s*\n\|\s*Sample-Interval:.*\n\+[-]+\+\n)(?:[+|].*\n)+)/gm,
+    (match) => buildCollapsibleSection("View Sample Interval Details", cleanAsciiTable(match))
+  );
+  
+  // Convert Time Intervals Details.
+  text = text.replace(
+  /(\+\-+\+\s*\n\|\s*Time Intervals\s*\|\s*\n\+\-+\+\s*\n)((?:(?:^[\+\|].*\n)+))(?=^\+[-]+\+\s*\n\|\s*(?:VALIDATIONS|Sample-Interval|TESTCASE RESULT|Validating EOM, Frequency & Timestamps for -)[^\n]*\n\+[-]+\+\s*\n|$)/gm,
+  (match, header, content) =>
+    buildCollapsibleSection(
+      "View Time Intervals Details",
+      cleanAsciiTable(header) + cleanAsciiTable(content),
+      '<br><div style="margin-bottom:10px; clear:both;"></div>'
+    )
+);
+
+// Convert Validating EOM sections (loop until no change).
+let oldText;
+do {
+  oldText = text;
+  text = text.replace(
+    /(\+\-+\+\s*\n\|\s*Validating EOM, Frequency & Timestamps for -.*\|\s*\n\+\-+\+\s*\n)((?:^\s*\d+\).*(?:\r?\n|$))+)/gm,
+    (match, header, content) => {
+      const summaryMatch = header.match(/\|\s*(Validating EOM, Frequency & Timestamps for -.*)\s*\|/);
+      const summaryText = summaryMatch ? summaryMatch[1].trim() : "View Validating EOM";
+      return buildCollapsibleSection(
+        summaryText,
+        cleanAsciiTable(content),
+        '<br><div style="margin-bottom:10px; clear:both;"></div>'
+      );
+    }
+  );
+} while (oldText !== text);
+  
+  // Generic conversion: replace any remaining ASCII blocks.
+  text = text.replace(/((?:^[+|].*(?:\n|$))+)/gm, (match) => cleanAsciiTable(match));
+  
+  // Replace [RPC] markers with bold formatting.
+  text = text.replace(/\[RPC\] => ([^\n]*)/g, "<strong>[RPC] => $1</strong>");
+  
+  // Wrap the whole converted log in a container with inline styling.
+  return `<div style="margin:24px; padding:16px; border:1px solid #ddd; border-radius:4px; background-color:#fafafa; display:block; word-wrap: break-word; white-space: pre-wrap;">${text}</div>`;
+
+}
+
+// --- Initialize Toggle Arrows ---
+// This function attaches toggle event listeners to all details elements
+// in the converted log so that the arrow rotates upon open/close.
+function initializeToggleArrows() {
+  var detailsList = document.querySelectorAll("#logContent details");
+  detailsList.forEach(function(details) {
+    var summary = details.querySelector("summary");
+    var arrow = summary.querySelector(".toggle-arrow");
+    details.addEventListener("click", function() {
+      console.log('this');
+      if (details.open) {
+        
+        arrow.style.transform = "rotate(90deg)";
+      } else {
+        console.log('else');
+        arrow.style.transform = "rotate(0deg)";
+      }
+    });
+  });
+}
+        </script>
+  </body>
+</html>
+<!-- this works -->
