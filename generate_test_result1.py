@@ -172,6 +172,7 @@ def dict_data_handling(files, filename_result):
         file_list = files if isinstance(files, list) else [files]
 
         # Second pass: Build detail rows for each file
+        test_id_counter = {}
         for data in file_list:
             deviation_platform_count = 0
             results = data.get("results", [])
@@ -180,6 +181,12 @@ def dict_data_handling(files, filename_result):
             platform_support = data.get("metadata", {}).get("platform_support", {})
 
             for result in sorted(results, key=lambda r: int(re.findall(r'\d+', r.get("test_id", "0"))[0])):
+                test_id = result.get("test_id", "")
+                # New unique key generation using a counter
+                current_count = test_id_counter.get(test_id, 0) + 1
+                test_id_counter[test_id] = current_count
+                unique_test_id = test_id if current_count == 1 else f"{test_id}_{current_count}"
+               
                 testcase = result.get("test_name", "")
                 if "<-" in testcase and "->" in testcase:
                     before = testcase.split("<-")[0].strip()
@@ -264,12 +271,12 @@ def dict_data_handling(files, filename_result):
                     <td>{platform_val1}</td>        
                     <td>{result_field}</td>
                     <td>
-                       <a href="LOG_REPORT_PLACEHOLDER?test_id={test_id}" onclick="openLogInNewTab(event, '{test_id}', this)">{inner_logs}</a>
-                    </td>
+                        <a href="LOG_REPORT_PLACEHOLDER?test_id={unique_test_id}" onclick="openLogInNewTab(event, '{unique_test_id}', this)">{inner_logs}</a>
+                </td>
                 </tr>
                 """
                 s_no += 1
-      
+    
     elif isinstance(files, dict):
         data = files
         tests_total_validations += data.get("tests_total_validations", 0)
@@ -354,7 +361,14 @@ def dict_data_handling(files, filename_result):
         test_coverage_str = f"{test_coverage}% [{input_xpaths}/{total_paths}]"
         detail_rows = ""
         s_no = 1
+        test_id_counter = {}
         for result in sorted(results, key=lambda r: int(re.findall(r'\d+', r.get("test_id", "0"))[0])):
+            test_id = result.get("test_id", "")
+            # New unique key generation using a counter
+            current_count = test_id_counter.get(test_id, 0) + 1
+            test_id_counter[test_id] = current_count
+            unique_test_id = test_id if current_count == 1 else f"{test_id}_{current_count}"
+            
             testcase = result.get("test_name", "")
             if "<-" in testcase and "->" in testcase:
                 before = testcase.split("<-")[0].strip()
@@ -423,7 +437,7 @@ def dict_data_handling(files, filename_result):
             <td>{deviation_field}</td>
             <td>{platform_val1}</td>
             <td>{result_field}</td>
-            <td> <a href="javascript:void(0)" onclick='parent.postMessage({{"action": "navigateToLogReport", "testId": "{test_id}"}}, "*");'>{inner_logs}</a></td>
+             <td> <a href="javascript:void(0)" onclick='parent.postMessage({{"action": "navigateToLogReport", "testId": "{unique_test_id}"}}, "*");'>{inner_logs}</a></td>
             </tr>
             """
             s_no += 1
@@ -458,7 +472,6 @@ def dict_data_handling(files, filename_result):
     template_html = template_html.replace("xpath_total_testcases", str(tests_total))
     template_html = template_html.replace("xpath_passed", str(tests_pass))
     template_html = template_html.replace("xpath_failed", f"{tests_fail} [F - {abs(tests_fail - deviation_failures)} D/P/S - {deviation_failures}]")
-    breakpoint()
     template_html = template_html.replace(
             "xpath_overall_result",
             "PASS" if deviation_failures > 0 else "FAIL")
