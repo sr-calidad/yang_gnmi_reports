@@ -458,10 +458,10 @@ def dict_data_handling(files, filename_result):
     template_html = template_html.replace("xpath_total_testcases", str(tests_total))
     template_html = template_html.replace("xpath_passed", str(tests_pass))
     template_html = template_html.replace("xpath_failed", f"{tests_fail} [F - {abs(tests_fail - deviation_failures)} D/P/S - {deviation_failures}]")
+    breakpoint()
     template_html = template_html.replace(
             "xpath_overall_result",
-            "PASS" if (deviation_failures == 0 and tests_failed_validations == 0) or (deviation_failures > 0 and tests_failed_validations >= 0) else "FAIL"
-        )
+            "PASS" if deviation_failures > 0 else "FAIL")
     template_html = template_html.replace("<!-- xpath_detail_rows -->", detail_rows)
 
     output_folder = "logs"
