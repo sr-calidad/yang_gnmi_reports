@@ -1192,7 +1192,7 @@
           if (typeof value !== 'string') return ''; // Return no color if value is not string
           const normalizedValue = value.toUpperCase();
           if (normalizedValue === 'PASS') return 'green';
-          if (normalizedValue === 'FAIL') return 'red';
+          if (normalizedValue === 'FAIL'|| normalizedValue === 'ERROR') return 'red';
           return 'orange'; // Default for all other cases
           }
             function populateIndividualSummaryTable(dataObj, path, statusType, isMultiple) {
@@ -1288,7 +1288,7 @@
                       let complianceMessageDisplay = Array.isArray(complianceValue) ? complianceValue[1] : "";
 
                       newRow.innerHTML = `
-                        <td>${complianceKey + ': ' + complianceItem['description']}</td>
+                        <td>${complianceKey.replace(/_/g, " ") + ': ' + complianceItem['description']}</td>
                         <td style="color: ${getStatusColor(complianceValueDisplay === null ? 'SKIP' : complianceValueDisplay)}; font-weight: bold;">
                           ${complianceValueDisplay === null ? 'SKIP' : complianceValueDisplay}
                         </td>
@@ -1579,7 +1579,7 @@
                         // Track the first PASS and FAIL card for default selection
                         if (status === 'PASS' && !firstPassCard) {
                           firstPassCard = card;
-                        } else if (status === 'FAIL' && !firstFailCard) {
+                        } else if ((status === 'FAIL' || status === 'ERROR') && !firstFailCard) {
                           firstFailCard = card;
                         }
                       } else {
@@ -1611,7 +1611,7 @@
                       // If the overall path status is passing, select a passing operation card.
                       firstPassCard.classList.add('active');
                       firstPassCard.click();
-                    } else if (overallPathStatus.includes('FAIL') && firstFailCard) {
+                    } else if (overallPathStatus.includes('FAIL') || overallPathStatus.includes('ERROR') && firstFailCard) {
                       // If the overall path status is failing, select a failing operation card.
                       firstFailCard.classList.add('active');
                       firstFailCard.click();
