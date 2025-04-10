@@ -1577,7 +1577,8 @@
 
                           // Add 'active' class to the clicked card (highlight)
                           card.classList.add('active');
-
+                           // Scroll to the active card smoothly and center it in view
++                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
                           // Call the report generation and summary population functions
                           generateReport(path, key, status, isMultiple);
                           populateIndividualSummaryTable(data, path, key,isMultiple);
