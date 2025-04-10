@@ -513,6 +513,7 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
         transition: border 0.3s, background-color 0.3s, box-shadow 0.3s;
         cursor: pointer;
+        flex: 0 0 300px;
       }
 
       .operation-card:hover {
@@ -946,6 +947,14 @@
         gap: 8px;
         margin-bottom: 5px;
       }
+      .center-icon {
+    display: block;       /* Makes the icon act as a block element */
+    font-size: 35px;      /* Retain the icon size */
+    color: #bdbdbd;       /* Retain the color */
+    margin-left: 115px;
+    margin-top: 45px;
+}
+
 
     </style>
   </head>
@@ -1532,8 +1541,7 @@
                       } else {
                         // No compliance data => show icon instead
                         complianceDetails = `
-                          <i class="bi bi-x-circle"
-                            style="font-size: 35px; color: #bdbdbd; margin-top: 35px; margin-left: 75px;">
+                          <i class="bi bi-x-circle center-icon">
                           </i>
                           <br>
                           <br>
