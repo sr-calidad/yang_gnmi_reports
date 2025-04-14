@@ -15,9 +15,9 @@ def run_report_script(script_path, args_list):
         error_message = str(e)
         if "No valid JSON files found" in error_message:
             print("Error: JSON file not found. Please ensure the JSON file exists in the specified directory.")
-        else:
-            print(f"Error executing script '{script_path}': {e}")
-        # sys.exit(1)
+        # else:
+        #     print(f"Error executing script '{script_path}': {e}")
+        sys.exit(1)
 
 def get_latest_html_report(directory):
     html_files = glob.glob(os.path.join(directory, "*.html"))
@@ -169,6 +169,8 @@ def main():
         print("Log file:", os.path.abspath(args.log))
         print("JSON file:", os.path.abspath(args.json))
         print("YAML file:", os.path.abspath(args.yaml))
+
+  
 
     # -------------------------------
     # Generate Log Report
