@@ -8,7 +8,7 @@
       rel="stylesheet"
     />
     <link href="https://fonts.cdnfonts.com/css/times-new-roman" rel="stylesheet">
-    <title>Testcase Report</title>
+    <title>Testcase Reportsss - {{model_info_raw}}</title>
     
       
    
@@ -36,34 +36,50 @@
       overflow: hidden; */
     }
     
-    header {
+    /* header {
     position: fixed;
     top: 0;
     left: 0;
     width: 110%;
     background: linear-gradient(135deg, rgb(209 209 209) 0%, rgb(144 122 122) 100%); /* Same as consolidated report */
-    z-index: 1000;
+    /* z-index: 1000;
     text-align: center;
     padding: 15px 0;
     color: white;
     font-family: "Times New Roman", serif;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-}
+} */ 
 
-    header h1 {
+    header {
+        position: absolute; /* Instead of fixed or sticky */
+        top: -5px;
+        left: 0;
+        width: 100%;
+        padding: 0px;
+        background: linear-gradient(135deg, rgb(209 209 209) 0%, rgb(144 122 122) 100%);
+        color: white;
+        text-align: center;
+        font-size: 10px;
+        font-family: "Times New Roman", serif;
+        z-index: 1000;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+
+    /* header h1 {
         font-family: "Times New Roman", serif !important;
         margin: 0;
         font-size: 1.5rem;
         border-bottom: #211d1d;
-        }
+        } */
 
-    .title {
+    /* .title {
         font-family: "Times New Roman", serif !important;
         font-size: 24px; /* Adjust size as needed */
-        font-weight: bold;
-        text-align: center;
-        color: black; /* Change color if needed */
-      }
+        /* font-weight: bold; */
+        /* text-align: center; */
+        /* color: black; Change color if needed */
+      /* } */ 
 
 
 
@@ -74,21 +90,21 @@
       padding-top: 60px; /* Adjust as needed */
   }
 
-    header {
+    /* header {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       /* background: inherit; */
-      z-index: 1000;
+      /* z-index: 1000;
       text-align: center;
       padding: 6px 0;
-    }
-    header h1 {
+    } */ */
+    /* header h1 {
       margin: 0;
       font-size: 1.5rem;
       border-bottom: #211d1d;
-    }
+    } */
 
     summary.collapsible-summary {
       color: #292e2f;
@@ -377,12 +393,26 @@ details[open] {
     .testcase-box.fail h5 {
       color: red;
     }
+
+    .status-icon.pass {
+      color: green;
+    }
+    .status-icon.fail {
+      color: red;
+    }
+
   </style>
   </head>
   <body>
     <!-- Fixed Header at the top (currently commented out) -->
     <header>
-      <h1 style="font-family: 'Times New Roman', serif !important;">Testcase Report </h1>
+      <!-- <h1 style="font-family: 'Times New Roman', serif !important;">Testcase Logs <span class="small-arrow">&#9654;</span> Model : {{model_info_raw}}</h1> -->
+
+      <h1 style="font-family: 'Times New Roman', serif !important;">
+        Testcase Logs{{model_heading}}
+      </h1>
+      
+  
   </header>
 
     <!-- Main Container Below Header -->
@@ -442,7 +472,9 @@ details[open] {
         // The placeholder {{testcase_data}} should be replaced by actual JSON data.
 
         const testcaseData = {{testcase_data}};
+        const model_info = {{model_info}};
         console.log(testcaseData);
+        console.log(model_info);
 
         // Variable to build the HTML for testcase details in the right panel.
         let detailsHTML = '';
@@ -459,7 +491,10 @@ details[open] {
           const doc = parser.parseFromString(rawHTML, 'text/html');
           const status = doc.querySelector('.testcase-section')?.getAttribute('data-status') || 'pass';
 
-          const icon = status === 'fail' ? '❌' : '✅';
+    
+          const icon = status === 'fail'
+          ? '<span style="color: red;">❌</span>'
+          : '<span style="color: green;">✔</span>';
 
           const li = document.createElement("li");
           li.innerHTML = `${tc}<span style="float: right;">${icon}</span>`;
@@ -558,7 +593,8 @@ details[open] {
   if (newTab) {
       newTab.document.write("<!DOCTYPE html><html lang='en'><head><title>GNMI Response</title>");
       newTab.document.write("<style>");
-      newTab.document.write("body { font-family: Arial, sans-serif; margin: 0; padding: 10px; }");  // Removed default margin, added slight padding
+      newTab.document.write('<style>body { font-family: "Times New Roman", serif; margin: 0; padding: 10px; }</style>');
+  // Removed default margin, added slight padding
       newTab.document.write("h2 { margin: 0; padding: 10px; background-color: #f8f9fa; border-bottom: 1px solid #ccc; text-align: center; }"); // Well-aligned title
       newTab.document.write("pre { white-space: pre-wrap; word-wrap: break-word; margin: 0; padding: 10px; }");
       newTab.document.write("</style></head>");
@@ -576,74 +612,74 @@ details[open] {
  <script>
   // multiple result//
   
-    // document.addEventListener('DOMContentLoaded', () => {
-    //     // Get test_id from URL
-    //     const params = new URLSearchParams(window.location.search);
-    //     const testId = params.get('test_id');
-
-    //     if (testId) {
-    //         // Find target elements
-    //         const target = document.getElementById("testcase-" + testId);
-    //         const testcaseListContainer = document.querySelector("#left-panel .card-body");
-    //         const selectedTestcase = document.querySelector(`[data-tc="${testId}"]`);
-
-    //         if (target && selectedTestcase) {
-    //             // Clear existing highlights - CORRECTED SELECTORS
-    //             document.querySelectorAll('#left-panel li.active, #logContent > div.active').forEach(el => {
-    //                 el.classList.remove('active');
-    //             });
-
-    //             // Apply new highlights
-    //             selectedTestcase.classList.add('active');
-    //             target.classList.add('active');
-
-    //             // Scroll to positions
-    //             testcaseListContainer.scrollTop = selectedTestcase.offsetTop - 100;
-    //             document.getElementById("rightPanelBody").scrollTop = target.offsetTop - 60;
-    //         }
-    //     }
-    // });
-
-    // single result
     document.addEventListener('DOMContentLoaded', () => {
-  // Get test_id from URL
-  const params = new URLSearchParams(window.location.search);
-  const testId = params.get('test_id');
+        // Get test_id from URL
+        const params = new URLSearchParams(window.location.search);
+        const testId = params.get('test_id');
 
-  if (testId) {
-    // Find the target elements for the selected testcase
-    const target = document.getElementById("testcase-" + testId);
-    const selectedTestcase = document.querySelector(`[data-tc="${testId}"]`);
+        if (testId) {
+            // Find target elements
+            const target = document.getElementById("testcase-" + testId);
+            const testcaseListContainer = document.querySelector("#left-panel .card-body");
+            const selectedTestcase = document.querySelector(`[data-tc="${testId}"]`);
 
-    if (target && selectedTestcase) {
-      // Clear and update the left panel:
-      // Remove all list items from the testcase list except the one with the matching testId.
-      const testcaseList = document.getElementById("testcase-list");
-      Array.from(testcaseList.children).forEach(child => {
-        if (child.getAttribute("data-tc") !== testId) {
-          child.remove();
-        } else {
-          // Ensure the selected list item has the "active" class
-          child.classList.add("active");
+            if (target && selectedTestcase) {
+                // Clear existing highlights - CORRECTED SELECTORS
+                document.querySelectorAll('#left-panel li.active, #logContent > div.active').forEach(el => {
+                    el.classList.remove('active');
+                });
+
+                // Apply new highlights
+                selectedTestcase.classList.add('active');
+                target.classList.add('active');
+
+                // Scroll to positions
+                testcaseListContainer.scrollTop = selectedTestcase.offsetTop - 100;
+                document.getElementById("rightPanelBody").scrollTop = target.offsetTop - 60;
+            }
         }
-      });
+    });
 
-      // Clear and update the right panel:
-      // Remove all testcase details except the one matching the testId.
-      const logContent = document.getElementById("logContent");
-      Array.from(logContent.children).forEach(child => {
-        if (child.id !== "testcase-" + testId) {
-          child.remove();
-        }
-      });
+    // OR for single entry of result
+//     document.addEventListener('DOMContentLoaded', () => {
+//   // Get test_id from URL
+//   const params = new URLSearchParams(window.location.search);
+//   const testId = params.get('test_id');
 
-      // Optionally, scroll the panels to show the selected testcase
-      const testcaseListContainer = document.querySelector("#left-panel .card-body");
-      testcaseListContainer.scrollTop = selectedTestcase.offsetTop - 100;
-      document.getElementById("rightPanelBody").scrollTop = target.offsetTop - 60;
-    }
-  }
-});
+//   if (testId) {
+//     // Find the target elements for the selected testcase
+//     const target = document.getElementById("testcase-" + testId);
+//     const selectedTestcase = document.querySelector(`[data-tc="${testId}"]`);
+
+//     if (target && selectedTestcase) {
+//       // Clear and update the left panel:
+//       // Remove all list items from the testcase list except the one with the matching testId.
+//       const testcaseList = document.getElementById("testcase-list");
+//       Array.from(testcaseList.children).forEach(child => {
+//         if (child.getAttribute("data-tc") !== testId) {
+//           child.remove();
+//         } else {
+//           // Ensure the selected list item has the "active" class
+//           child.classList.add("active");
+//         }
+//       });
+
+//       // Clear and update the right panel:
+//       // Remove all testcase details except the one matching the testId.
+//       const logContent = document.getElementById("logContent");
+//       Array.from(logContent.children).forEach(child => {
+//         if (child.id !== "testcase-" + testId) {
+//           child.remove();
+//         }
+//       });
+
+//       // Optionally, scroll the panels to show the selected testcase
+//       const testcaseListContainer = document.querySelector("#left-panel .card-body");
+//       testcaseListContainer.scrollTop = selectedTestcase.offsetTop - 100;
+//       document.getElementById("rightPanelBody").scrollTop = target.offsetTop - 60;
+//     }
+//   }
+// });
 
 </script>
 
