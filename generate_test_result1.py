@@ -42,6 +42,10 @@ def parse_log_files_from_directory(directory):
     
     return combined_data
 
+def capitalize_model_info(info):
+    # Split by - and _, capitalize each part, then join back preserving original separators
+    return re.sub(r'[^-_]+', lambda m: m.group(0).capitalize(), info)
+
 def dict_data_handling(files, filename_result):
     # Initialize counters and other variables for summing purposes
     tests_total_validations = 0 
@@ -79,6 +83,7 @@ def dict_data_handling(files, filename_result):
     if isinstance(files, list):
         # First pass: Sum the numeric fields from each file
         for data in files:
+       
             tests_total_validations += data.get("tests_total_validations", 0)
             tests_passed_validations += data.get("tests_passed_validations", 0)
             tests_failed_validations += data.get("tests_failed_validations", 0)
@@ -86,6 +91,9 @@ def dict_data_handling(files, filename_result):
             tests_pass += data.get("tests_pass", 0)
             tests_total += data.get("tests_total", 0)
             tests_fail += data.get("tests_fail", 0)
+
+            model_info = data['labels'][0]
+          
             
             metadata = data.get("metadata", {})
             summary = metadata.get("summary_dict", {})
@@ -243,6 +251,10 @@ def dict_data_handling(files, filename_result):
                     else:
                         result_field = "PASS" + f"(P-{platform_val1})"
 
+                verdict = result.get("verdict", {}) 
+                # metadata = data.get("metadata", {})
+                verdict_reason = result.get("verdict_reason", "N/A")
+                breakpoint()
                 total_validations = result.get("total_validations", 0)
                 passed_validations = result.get("passed_validations", 0)
                 failed_validations = result.get("failed_validations", 0)
@@ -290,15 +302,17 @@ def dict_data_handling(files, filename_result):
         test_target = data.get("test_target", "N/A")
         description = data.get("description", "")
         labels = data.get("labels", [])
-        model_info = ", ".join(labels) if labels else "N/A"
+        model_info = data['labels'][0]
+        #model_info = ", ".join(labels) if labels else "N/A"
+      
         results = data.get("results", [])
         start_time = data.get("start_time_sec", 0)
         end_time = data.get("end_time_sec", 0)
         duration = end_time - start_time
 
         metadata = data.get("metadata", {})
-        model_info_str.update(labels)
-        model_info = ", ".join(model_info_str) if model_info_str else "N/A"
+        #model_info_str.update(labels)
+        #model_info = ", ".join(model_info_str) if model_info_str else "N/A"
         summary = metadata.get("summary_dict", {})
         deviations = metadata.get("deviations", {})
         platform_support = metadata.get("platform_support", {})
@@ -411,6 +425,8 @@ def dict_data_handling(files, filename_result):
                 else:
                     result_field = "PASS" + f"(P-{platform_val1})"
 
+            verdict = result.get("verdict", "N/A")
+            verdict_reason = result.get("verdict_reason", "N/A")
             total_validations = result.get("total_validations", 0)
             passed_validations = result.get("passed_validations", 0)
             failed_validations = result.get("failed_validations", 0)
@@ -448,6 +464,8 @@ def dict_data_handling(files, filename_result):
     main_template_path = os.path.join("template.html")
     template_path = alternative_template_path if os.path.exists(alternative_template_path) else main_template_path
 
+    model_info = capitalize_model_info(model_info)
+
     with open(template_path, "r", encoding="utf-8") as f:
         template_html = f.read()
 
@@ -472,9 +490,15 @@ def dict_data_handling(files, filename_result):
     template_html = template_html.replace("xpath_total_testcases", str(tests_total))
     template_html = template_html.replace("xpath_passed", str(tests_pass))
     template_html = template_html.replace("xpath_failed", f"{tests_fail} [F - {abs(tests_fail - deviation_failures)} D/P/S - {deviation_failures}]")
-    template_html = template_html.replace(
-            "xpath_overall_result",
-            "PASS" if deviation_failures > 0 else "FAIL")
+    if deviation_failures > 0:
+        status_text = "PASS"
+    else:
+        if tests_fail > 0:
+            status_text = "FAIL"
+        else: 
+            status_text = "PASS"   
+
+    template_html = template_html.replace("xpath_overall_result", status_text)
     template_html = template_html.replace("<!-- xpath_detail_rows -->", detail_rows)
 
     output_folder = "logs"
