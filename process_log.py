@@ -435,7 +435,7 @@ def parse_log_content(content):
      
          # Ensure the key is unique if duplicate TC_ID exists
         unique_key = tc_id
-        counter = 1
+        counter = 0
         while unique_key in testcase_data:
             counter += 1
             unique_key = f"{tc_id}_{counter}"
@@ -445,6 +445,7 @@ def parse_log_content(content):
 
 def parse_log_files_from_directory(directory):
     combined_content = ""
+    model_info =""
     for filename in os.listdir(directory):
         if filename.endswith("_tc_result.log"):
             filepath = os.path.join(directory, filename)
@@ -455,9 +456,21 @@ def parse_log_files_from_directory(directory):
             except Exception as e:
                 print(f"Error reading file {filename}: {e}")
                 continue
-    return combined_content
+        if filename.endswith("_result.json"):
+            filepath_json = os.path.join(directory, filename)
+            try:
+                with open(filepath_json, 'r', encoding='utf-8') as f:
+                    content_json = f.read()
+                    parsed_json = json.loads(content_json)
+                    model_info = parsed_json['labels'][0]
+                    model_info = model_info.replace('_', '-').title() if model_info else ""
+            except Exception as e:
+                print(f"Error reaeding file {filename}: {e}")
+                continue
 
-def generate_html(data, input_path, output_folder="logs"):
+    return combined_content,model_info
+
+def generate_html(data, input_path,model_info, output_folder="logs"):
     # Determine the base directory of the script (2 levels up if inside Report_Generators)
     # base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
     base_dir = os.path.dirname(os.path.abspath(__file__)) #replaced with abover line 
@@ -501,6 +514,13 @@ def generate_html(data, input_path, output_folder="logs"):
     all_testcases = "\n".join(data["testcase_data"].values())
     rendered_html = template_content.replace("{{testcase_data}}", json.dumps(data["testcase_data"]))
     rendered_html = rendered_html.replace("{{all_testcases}}", all_testcases)
+    rendered_html = rendered_html.replace("{{model_info}}", json.dumps(model_info if model_info else ""))
+    rendered_html = rendered_html.replace("{{model_info_raw}}", model_info if model_info else "")
+    model_heading = f'<span style="font-size:14px; margin:0 5px;">&#9654;</span>Model : {model_info}' if model_info else ''
+    rendered_html = rendered_html.replace("{{model_heading}}", model_heading)
+
+
+
 
     with open(output_file, 'w', encoding='utf-8',errors='ignore') as f:
         f.write(rendered_html)
@@ -513,19 +533,22 @@ if __name__ == "__main__":
         sys.exit(1)
 
     input_path = sys.argv[1]
+    model_info =""
+
     try:
         if os.path.isfile(input_path) and input_path.endswith("_tc_result.log"):
             with open(input_path, 'r', encoding='utf-8') as f:
                 log_content = f.read()
             parsed_data = parse_log_content(log_content)
         elif os.path.isdir(input_path):
-            combined_log_content = parse_log_files_from_directory(input_path)
+
+            combined_log_content,model_info = parse_log_files_from_directory(input_path)
             parsed_data = parse_log_content(combined_log_content)
         else:
             print(f"Error: '{input_path}' is not a valid log file or directory.")
             sys.exit(1)
 
-        output_file = generate_html(parsed_data, input_path)
+        output_file = generate_html(parsed_data, input_path,model_info)
         print(f"✅ HTML report generated: {output_file}")
     except Exception as e:
         print(f"❌ Error processing the log file: {e}")
