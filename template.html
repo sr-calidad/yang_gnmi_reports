@@ -75,6 +75,14 @@
         word-wrap: break-word;
         overflow-wrap: break-word;
     }
+    /* Adjust the TestCase column width */
+    th:nth-child(9), td:nth-child(9) { 
+      width: auto;   
+      max-width: 3000px; /* Adjust width as needed */
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
     h1 {
       font-size: 22px !important; 
       color: rgb(255, 255, 255); /* White text */
@@ -86,7 +94,7 @@
       }
 
     /* Reduce the Log column width */
-    th:nth-child(9), td:nth-child(9) { 
+    th:nth-child(10), td:nth-child(10) { 
         max-width: 200px; /* Adjust width as needed */
         white-space: nowrap;   /* Prevent text from wrapping */
         overflow: hidden;
@@ -233,6 +241,7 @@ div.dataTables_wrapper div.dataTables_info {
                     <th>Deviation</th>
                     <th>Platform (<strong>xpath_p_result </strong>)</th>
                     <th>Result</th>
+                    <th>Comments</th>
                     <th>Log</th>
                   </tr>
                 </thead>
@@ -377,7 +386,7 @@ div.dataTables_wrapper div.dataTables_info {
     let hideTooltipTimeout;
 
     // Show tooltip on hover & adjust position dynamically
-    $('#example tbody').on('mouseenter', 'td:nth-child(9)', function () {
+    $('#example tbody').on('mouseenter', 'td:nth-child(10)', function () {
         clearTimeout(hideTooltipTimeout); // Prevent immediate hiding
 
         const logText = $(this).text().trim();
@@ -412,7 +421,7 @@ div.dataTables_wrapper div.dataTables_info {
     });
 
     // Hide tooltip when leaving the "Log" column or tooltip
-    $('#example tbody').on('mouseleave', 'td:nth-child(9)', function () {
+    $('#example tbody').on('mouseleave', 'td:nth-child(10)', function () {
     hideTooltipTimeout = setTimeout(() => {
         $('#logTooltip').stop(true, true).fadeOut(100, function () {
             $(this).css({ display: 'none' });
@@ -435,7 +444,7 @@ div.dataTables_wrapper div.dataTables_info {
 
     // Hide tooltip when clicking anywhere outside
     $(document).on('click', function (event) {
-        if (!$(event.target).closest('td:nth-child(9), #logTooltip').length) {
+        if (!$(event.target).closest('td:nth-child(10), #logTooltip').length) {
             $('#logTooltip').stop(true, true).fadeOut(100, function () {
                 $(this).css({ display: 'none' });
             });
