@@ -211,52 +211,42 @@ def process_directory(yaml_file, directory, output_folder="logs"):
             prefix = base[:-len(suffix)]
             log_files[prefix] = base
 
+    if not json_files:
+        logger.error(f"No valid JSON files found in directory '{directory}'.")
+        sys.exit(1)
     # if not json_files:
     #     logger.error(f"No valid JSON files found in directory '{directory}'.")
     #     sys.exit(1)
-    if not json_files:
-        logger.error(f"No valid JSON files found in directory '{directory}'.")
-        # Create an empty aggregated report and tree.
-        aggregated_report = {}  
-        tree = {}
         
-        # Load the template file as usual.
-        template_file = os.path.join("Report_Generators", "Yang_Tree_HTML", "existing_template.html")
-        if not os.path.exists(template_file):
-            template_file = os.path.join("existing_template.html")
-        if not os.path.exists(template_file):
-            logger.error("Template file not found.")
-            sys.exit(1)
+    #     try:
+    #         with open(template_file, 'r') as file:
+    #             template = file.read()
+    #             logger.debug(f"Loaded HTML template from {template_file}")
+    #     except Exception as e:
+    #         logger.error(f"Error reading template file '{template_file}': {e}")
+    #         sys.exit(1)
         
-        try:
-            with open(template_file, 'r') as file:
-                template = file.read()
-                logger.debug(f"Loaded HTML template from {template_file}")
-        except Exception as e:
-            logger.error(f"Error reading template file '{template_file}': {e}")
-            sys.exit(1)
+    #     # Replace placeholders with empty data.
+    #     final_html = template.replace("{{data}}", json.dumps(aggregated_report))
+    #     final_html = final_html.replace("{{heading}}", "")
+    #     final_html = final_html.replace("{{treeData}}", json.dumps(tree))
         
-        # Replace placeholders with empty data.
-        final_html = template.replace("{{data}}", json.dumps(aggregated_report))
-        final_html = final_html.replace("{{heading}}", "")
-        final_html = final_html.replace("{{treeData}}", json.dumps(tree))
+    #     # Define the output file path as you normally do.
+    #     logs_folder = os.path.dirname(os.path.abspath(__file__))
+    #     logs_dir = os.path.join(logs_folder, output_folder)
+    #     os.makedirs(logs_dir, exist_ok=True)
+    #     dir_name = os.path.basename(directory)
+    #     output_file = os.path.join(logs_dir, dir_name + "_yang_tree_report.html")
         
-        # Define the output file path as you normally do.
-        logs_folder = os.path.dirname(os.path.abspath(__file__))
-        logs_dir = os.path.join(logs_folder, output_folder)
-        os.makedirs(logs_dir, exist_ok=True)
-        dir_name = os.path.basename(directory)
-        output_file = os.path.join(logs_dir, dir_name + "_yang_tree_report.html")
-        
-        try:
-            with open(output_file, "w") as html_file:
-                html_file.write(final_html)
-            logger.info(f"HTML report generated (empty): {output_file}")
-        except Exception as exc:
-            logger.error(f"Error writing to output file: {exc}")
-            sys.exit(1)
-        # Return or exit gracefully.
-        return
+    #     try:
+    #         with open(output_file, "w") as html_file:
+    #             html_file.write(final_html)
+    #         logger.info(f"HTML report generated (empty): {output_file}")
+    #     except Exception as exc:
+    #         logger.error(f"Error writing to output file: {exc}")
+    #         sys.exit(1)
+    #     # Return or exit gracefully.
+    #     return
 
     
     aggregated_report = {}
@@ -289,6 +279,7 @@ def process_directory(yaml_file, directory, output_folder="logs"):
         report, model = summarize_test_report(tc_result_filename=json_path, validation_file=yaml_file, log_file=log_path)
         if not yang_model:
             yang_model = model
+        yang_model = model
        
         # Merge the report data into aggregated_report.
         for key, value in report.items():
@@ -334,7 +325,8 @@ def process_directory(yaml_file, directory, output_folder="logs"):
     # Generate the final HTML by replacing the placeholders in the template.
     final_html = template.replace("{{data}}", json.dumps(aggregated_report))
     if yang_model.startswith("Model - "):
-        yang_model = yang_model.replace("Model - ", "", 1)
+   
+        yang_model = yang_model.replace("Model - ", "Model : ", 1)
 
     final_html = final_html.replace("{{heading}}", yang_model if yang_model else "")
     #final_html = final_html.replace("{{heading}}", yang_model if yang_model else "")
