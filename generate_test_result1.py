@@ -205,6 +205,8 @@ def dict_data_handling(files, filename_result):
                 inner_results = result.get("results", [])
                 if inner_results:
                     validations = inner_results[0].get("validations", {})
+                    verdict = inner_results[0].get("verdict", "N/A")
+                    verdict_reason = inner_results[0].get("verdict_reason", "N/A")
                     section_name = next(iter(validations), None)
                     op_dict = validations.get(section_name, {}).get("type", {})
                     if op_dict:
@@ -251,10 +253,8 @@ def dict_data_handling(files, filename_result):
                     else:
                         result_field = "PASS" + f"(P-{platform_val1})"
 
-                verdict = result.get("verdict", {}) 
                 # metadata = data.get("metadata", {})
-                verdict_reason = result.get("verdict_reason", "N/A")
-                breakpoint()
+               
                 total_validations = result.get("total_validations", 0)
                 passed_validations = result.get("passed_validations", 0)
                 failed_validations = result.get("failed_validations", 0)
@@ -281,7 +281,8 @@ def dict_data_handling(files, filename_result):
                     <td>{success}</td>
                     <td>{deviation_field}</td>
                     <td>{platform_val1}</td>        
-                    <td>{result_field}</td>
+                    <td>{verdict}</td>
+                    <td>{verdict_reason}</td>
                     <td>
                         <a href="LOG_REPORT_PLACEHOLDER?test_id={unique_test_id}" onclick="openLogInNewTab(event, '{unique_test_id}', this)">{inner_logs}</a>
                 </td>
@@ -424,7 +425,6 @@ def dict_data_handling(files, filename_result):
                     result_field = "PASS" + "(D)" + f"(P-{platform_val1})"
                 else:
                     result_field = "PASS" + f"(P-{platform_val1})"
-
             verdict = result.get("verdict", "N/A")
             verdict_reason = result.get("verdict_reason", "N/A")
             total_validations = result.get("total_validations", 0)
@@ -452,7 +452,8 @@ def dict_data_handling(files, filename_result):
             <td>{success}</td>
             <td>{deviation_field}</td>
             <td>{platform_val1}</td>
-            <td>{result_field}</td>
+            <td>{verdict}</td>
+            <td>{verdict_reason}</td>
              <td> <a href="javascript:void(0)" onclick='parent.postMessage({{"action": "navigateToLogReport", "testId": "{unique_test_id}"}}, "*");'>{inner_logs}</a></td>
             </tr>
             """
@@ -570,4 +571,4 @@ def main():
     dict_data_handling(combined_data, filename_result)
 
 if __name__ == "__main__":
-    main()
+    main()  
