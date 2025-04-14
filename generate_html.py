@@ -613,6 +613,10 @@ def update_skeleton_dict(operations, skeleton_dict, log_string, gnmi_log, test_l
     Returns:
         dict: The updated skeleton dictionary.
     """
+    if type_key not in skeleton_dict:
+        logger.debug(f"Type key '{type_key}' is not present (likely not supported). Skipping update for test '{test_name}'.")
+        return skeleton_dict
+    
     skeleton_dict[type_key]["full_path"] = test_name
     skeleton_dict[type_key]["new_log"] = new_log
     skeleton_dict[type_key]["status"] = json_result if json_result is not None else status
