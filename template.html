@@ -206,7 +206,9 @@ div.dataTables_wrapper div.dataTables_info {
                   <td>Passed - <strong>xpath_passed</strong></td>
                   <td>Failed - <strong>xpath_failed</strong></td>
                   
-                  <td id="resultText" colspan="1"><strong>xpath_overall_result</strong></td>
+                  <td id="resultText" data-color="green"><strong>xpath_overall_result</strong></td>
+  
+
                   <!-- <td style="color:orange; width: 300px; height: 50px; overflow: auto; border: 1px solid #ccc; padding: 5px;">
                       <strong>
                         D -> Deviation, S -> Sub-Xpaths, P -> Platform,<br>
@@ -256,11 +258,11 @@ div.dataTables_wrapper div.dataTables_info {
     </div>
 
   </div>
-  <script>
+  <!-- <script>
   
     // Set the color based on the value of xpath_overall_result
-    document.getElementById("resultText").style.color = (xpath_overall_result == "PASS") ? "green" : "red";
-  </script>
+    document.getElementById("resultText").style.color = (xpath_overall_result == "PASS") ? "grey" : "black";
+  </script> -->
   <script>
     $(document).ready(function() {
     $.extend( $.fn.dataTableExt.oSort, {
@@ -288,19 +290,23 @@ div.dataTables_wrapper div.dataTables_info {
         
         "dom": '<"top-container d-flex justify-content-between align-items-center"<"d-flex align-items-center"l i>p>rt<"bottom-container d-flex justify-content-between align-items-center"<"d-flex align-items-center"l i>p>',
         "createdRow": function(row, data, dataIndex) {
-            $(row).find("td:eq(7), td:eq(4)").each(function() {
-                var cellText = $(this).text().trim();
-                if (cellText.startsWith("PASS")) {
-                    if (cellText.includes("(P-NS)")) {
-                        $(this).css({"color": "orange", "font-weight": "bold"});  // PASS with (P-NS) → ORANGE
-                    } else {
-                        $(this).css({"color": "green", "font-weight": "bold"});  // Any other PASS → GREEN
-                    }
-                } else if (cellText === "FAIL") {
-                    $(this).css({"color": "red", "font-weight": "bold"});  // FAIL → RED
+    // Preserve the color already set in HTML by not overriding column 7
+        $(row).find("td:eq(4)").each(function() {
+            var cellText = $(this).text().trim();
+            if (cellText.startsWith("PASS")) {
+                if (cellText.includes("(P-NS)")) {
+                    $(this).css({"color": "orange", "font-weight": "bold"});
+                } else {
+                    $(this).css({"color": "green", "font-weight": "bold"});
                 }
-            });
-        },
+            } else if (cellText === "FAIL") {
+                $(this).css({"color": "red", "font-weight": "bold"});
+            }
+        });
+
+        // Let td:eq(7) retain the color from the inline style (from Python)
+    }
+,
         "drawCallback": function(settings) {
           // Update the S.No column to reflect the current order/page
           var api = this.api();
@@ -309,7 +315,7 @@ div.dataTables_wrapper div.dataTables_info {
             });
             
             $('#example tbody tr').each(function() {
-                $(this).find("td:eq(4), td:eq(7)").each(function() {
+                $(this).find("td:eq(4)").each(function() {
                     var cellText = $(this).text().trim();
                     if (cellText.startsWith("PASS")) {
                         if (cellText.includes("(P-NS)")) {
@@ -324,6 +330,31 @@ div.dataTables_wrapper div.dataTables_info {
             });
         }
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    var resultCell = document.getElementById("resultText");
+
+    if (resultCell) {
+        const color = resultCell.getAttribute("data-color");
+        resultCell.style.color = color || "black";
+        resultCell.style.fontWeight = "bold";
+    }
+
+    // if (resultCell) {
+    //     var resultText = resultCell.innerText.trim(); // Get actual text from the cell
+
+    //     // Ensure proper comparison by converting to uppercase
+    //     if (resultText.toUpperCase() === "PASS") {
+    //         resultCell.style.color = "green";  // Set color for PASS
+    //         resultCell.style.fontWeight = "bold";
+    //     } else if (resultText.toUpperCase() === "FAIL") {
+    //         resultCell.style.color = "red";  // Set color for FAIL
+    //         resultCell.style.fontWeight = "bold";
+    //     } else {
+    //         resultCell.style.color = "black"; // Default color
+    //     }
+    // }
+});
 
     // Ensure header remains fixed on horizontal scroll
     $('.dataTables_scrollBody').on('scroll', function() {
