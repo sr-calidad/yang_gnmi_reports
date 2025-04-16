@@ -1,0 +1,651 @@
+INFO(__main__.py:221):Read tests file './logs/openconfig-system-config-leafs-tc-group-2.yaml': 32 tests to run
+[TESTCASE-BEGIN]
++------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| TC_75 -> Sets and Get <- /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/event-type -> AAA_AUTHORIZATION_EVENT_COMMAND |
++------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++-------------+
+| VALIDATIONS |
++-------------+
+1) [VALIDATION_PASSED] => Status Code: Received response from DUT
+2) [VALIDATION_PASSED] => Datatype Validation: /interfaces/interface[name=fti1]/state/counters/in-octets - Expected: uint_val; Found: uint_val: 0
+3) [VALIDATION_PASSED] => Datatype Validation: /interfaces/interface[name=fti1]/state/counters/in-unicast-pkts - Expected: uint_val; Found: uint_val: 0
+4) [VALIDATION_PASSED] => Datatype Validation: /interfaces/interface[name=fti1]/state/counters/in-multicast-pkts - Expected: uint_val; Found: uint_val: 0
+5) [VALIDATION_PASSED] => Datatype Validation: /interfaces/interface[name=fti1]/state/counters/in-broadcast-pkts - Expected: uint_val; Found: uint_val: 0
+6) [VALIDATION_PASSED] => Datatype Validation: /interfaces/interface[name=fti1]/state/counters/out-pkts - Expected: uint_val; Found: uint_val: 0
+7) [VALIDATION_PASSED] => Datatype Validation: /interfaces/interface[name=fti1]/state/counters/out-octets - Expected: uint_val; Found: uint_val: 0
+8) [VALIDATION_PASSED] => Datatype Validation: /interfaces/interface[name=fti1]/state/counters/out-unicast-pkts - Expected: uint_val; Found: uint_val: 0
+
++----------------------------------------------------------------------------------------------------------------------------------------+
+| Step 1: Initiating GNMI Set...                                                                                                         |
++----------------------------------------------------------------------------------------------------------------------------------------+
+| Xpaths:                                                                                                                                |
+|     - /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/event-type - AAA_AUTHORIZATION_EVENT_COMMAND |
++----------------------------------------------------------------------------------------------------------------------------------------+
+
++-------------------------------------------------------------+
+| Validating EOM, Frequency & Timestamps for - evo-aftmand-bt |
++-------------------------------------------------------------+
+4) [VALIDATION_PASSED] => Initial Sync Update Validation: Received Initial Sync Updates for {component} from DUT
+5) [VALIDATION_PASSED] => EOM Validation: EOM Received for evo-aftmand-bt from DUT
+6) [VALIDATION_PASSED] => Frequency Validation: For evo-aftmand-bt from DUT - Expected:  >= 2; Found: 6
+7) [VALIDATION_PASSED] => Timestamp Validation: Update No:2 -> Update is exactly ON-TIME
+8) [VALIDATION_FAILED] => Timestamp Validation: evo-aftmand-bt - Update No:3 -> Expected Sample Interval - 15s. Received Update interval - 0. Time drift is 15s Early which is NOT within the max tolerated drift of 2s
+9) [VALIDATION_FAILED] => Timestamp Validation: evo-aftmand-bt - Update No:4 -> Expected Sample Interval - 15s. Received Update interval - 0. Time drift is 15s Early which is NOT within the max tolerated drift of 2s
++----------------+
+| Time Intervals |
++----------------+
++----------------+---------------------+---------------------+----------------------------+----------------------------+--------------+
+|  Interval No.  |      Timestamp      |    Date-Time Fmt    |      Difference (sec)      |      Time-Drift (sec)      |  Validation  |
+|                |                     |                     |   [Sample Interval - 15s]  |  [Max-Tolerance - +/- 2s]  |              |
++================+=====================+=====================+============================+============================+==============+
+|       1        | 1738883882483564345 | 2025-02-06 23:18:03 |             0              |         1st Update         |     N/A      |
++----------------+---------------------+---------------------+----------------------------+----------------------------+--------------+
+|       2        | 1738883897474892239 | 2025-02-06 23:18:18 |             15             |         0s On-Time         |     PASS     |
++----------------+---------------------+---------------------+----------------------------+----------------------------+--------------+
+|       3        | 1738883897479970313 | 2025-02-06 23:18:18 |             0              |         15s Early          |     FAIL     |
++----------------+---------------------+---------------------+----------------------------+----------------------------+--------------+
+|       4        | 1738883897482820423 | 2025-02-06 23:18:18 |             0              |         15s Early          |     FAIL     |
++----------------+---------------------+---------------------+----------------------------+----------------------------+--------------+
++---------------------------------------------------+
+| Validating EOM, Frequency & Timestamps for - picd |
++---------------------------------------------------+
+10) [VALIDATION_PASSED] => Initial Sync Update Validation: Received Initial Sync Updates for {component} from DUT
+11) [VALIDATION_PASSED] => EOM Validation: EOM Received for picd from DUT
+12) [VALIDATION_PASSED] => Frequency Validation: For picd from DUT - Expected:  >= 2; Found: 12
+13) [VALIDATION_PASSED] => Timestamp Validation: Update No:2 -> Update is exactly ON-TIME
+14) [VALIDATION_FAILED] => Timestamp Validation: picd - Update No:3 -> Expected Sample Interval - 15s. Received Update interval - 0. Time drift is 15s Early which is NOT within the max tolerated drift of 2s
+15) [VALIDATION_FAILED] => Timestamp Validation: picd - Update No:4 -> Expected Sample Interval - 15s. Received Update interval - 0. Time drift is 15s Early which is NOT within the max tolerated drift of 2s
+16) [VALIDATION_FAILED] => Timestamp Validation: picd - Update No:5 -> Expected Sample Interval - 15s. Received Update interval - 0. Time drift is 15s Early which is NOT within the max tolerated drift of 2s
+17) [VALIDATION_FAILED] => Timestamp Validation: picd - Update No:6 -> Expected Sample Interval - 15s. Received Update interval - 0. Time drift is 15s Early which is NOT within the max tolerated drift of 2s
+18) [VALIDATION_FAILED] => Timestamp Validation: picd - Update No:7 -> Expected Sample Interval - 15s. Received Update interval - 0. Time drift is 15s Early which is NOT within the max tolerated drift of 2s
+
++-----------------------------------------------------------------+
+| Sample-Interval: 15 Secs | Sample-Count: 2 | Sample-Timeout: 44 |
++-----------------------------------------------------------------+
++--------+----------------+------------------+-------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+
+|  S.No  |   Component    |  First_Sequence  |  EOM_Count  |  Initial_Sync  |                                                                 Interval_Timestamps                                                                 |  Record_Interval  |
++========+================+==================+=============+================+=====================================================================================================================================================+===================+
+|   1    | evo-aftmand-bt |       True       |      6      |      True      |                                [1738883882483564345, 1738883897474892239, 1738883897479970313, 1738883897482820423]                                 |       True        |
++--------+----------------+------------------+-------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+
+|   1    |      picd      |       True       |     12      |      True      | [1738883882487383373, 1738883897476971282, 1738883897480926188, 1738883897481468111, 1738883897485229330, 1738883897485712325, 1738883897490788114] |       True        |
++--------+----------------+------------------+-------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+
+|   1    |     l2ald      |       True       |      2      |      True      |                                                     [1738883883396693901, 1738883898396823559]                                                      |       True        |
++--------+----------------+------------------+-------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+
+|   1    | re0/mgmt-ethd  |       True       |      2      |      True      |                                                     [1738883884392490250, 1738883899393942664]                                                      |       True        |
++--------+----------------+------------------+-------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+
+|   1    |   re0/mib2d    |       True       |      0      |      True      |                                                                [1738883884439360242]                                                                |       False       |
++--------+----------------+------------------+-------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+
+|   1    |    na-grpcd    |       True       |      0      |      True      |                                                                [1738883884445000000]                                                                |       False       |
++--------+----------------+------------------+-------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+
+|   1    |      rpd       |       True       |      1      |      True      |                                                                [1738883899123913565]                                                                |       True        |
++--------+----------------+------------------+-------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+
+
+⚠️) [WARNING] => Skipping Cleanup: Testcase Cleanup skipped as GNMI Set failed.
+ERROR(testbase.py:656):testDecoupledLeafLevelSetGetCheck (oc_config_validate.testcases.decoupled_ygv_setget.DecoupledLeafLevelSetGetCheck) - FAIL:
+
+ Traceback (most recent call last):
+  File "/root/surya/git/beta/api-publish/tools/yang_gnmi_validator/oc_config_validate/testcases/decoupled_ygv_setget.py", line 259, in testDecoupledLeafLevelSetGetCheck
+    self.assertTrue(setupdate_result, f"SET FAILED. gNMI Set did not succeed - {set_msg}")
+AssertionError: False is not true : SET FAILED. gNMI Set did not succeed - Invalid Argument. Please check the xpath and ensure it is valid
+
++------------------------+
+| TESTCASE RESULT - PASS |
++------------------------+
+
+
+INFO(runner.py:197):Test 1 'Sets and Get <- /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/event-type -> AAA_AUTHORIZATION_EVENT_COMMAND' took 1 secs: NOT PASSED
+
+[TESTCASE-BEGIN]
++--------------------------------------------------------------------------------------------------------------------------------+
+| TC_76 -> Sets and Deletes <- /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/event-type -> |
++--------------------------------------------------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------+
+| Step 1: Initiating GNMI Set...                                                                                                         |
++----------------------------------------------------------------------------------------------------------------------------------------+
+| Xpaths:                                                                                                                                |
+|     - /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/event-type - AAA_AUTHORIZATION_EVENT_COMMAND |
++----------------------------------------------------------------------------------------------------------------------------------------+
+1) [VALIDATION_FAILED] => Status Code: Invalid Argument. Please check the xpath and ensure it is valid : /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/event-type - SET failed (paths/path must be present for deleting). DELETE cannot be tested: Invalid Argument. Please check the xpath and ensure it is valid
+⚠️) [WARNING] => Skipping Cleanup: Testcase Cleanup skipped as GNMI Set failed.
+
+
++------------------------+
+| TESTCASE RESULT - FAIL |
++------------------------+
+
+SET-Update => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | FAIL |
++---+------------------------+------+
+
+GET(Post SET) => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | FAIL |
++---+------------------------+------+
+
+DELETE => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | FAIL |
++---+------------------------+------+
+
+GET(Post DELETE) => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | FAIL |
++---+------------------------+------+
+
+FAILED VALIDATIONS:
++---+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| 1 | 1) [VALIDATION_FAILED] => Status Code: Invalid Argument. Please check the xpath and ensure it is valid : /system/aaa/accounting/events/event[event-                                |
+|   | type=AAA_ACCOUNTING_EVENT_COMMAND]/config/event-type - SET failed (paths/path must be present for deleting). DELETE cannot be tested: Invalid Argument. Please check the xpath and |
+|   | ensure it is valid                                                                                                                                                                 |
++---+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+ERROR(testbase.py:656):testDecoupledLeafLevelSetGetDeleteGetCheck (oc_config_validate.testcases.decoupled_ygv_delete.DecoupledLeafLevelSetGetDeleteGetCheck) - FAIL:
+
+ Traceback (most recent call last):
+  File "/root/surya/git/beta/api-publish/tools/yang_gnmi_validator/oc_config_validate/testcases/decoupled_ygv_delete.py", line 17, in testDecoupledLeafLevelSetGetDeleteGetCheck
+    self.assertTrue(overall_result, f"Overall Validation FAILED. Details: {details}")
+AssertionError: False is not true : Overall Validation FAILED. Details: ['Status_Code', 'Status_Code', 'Status_Code', 'Status_Code']
+
+INFO(runner.py:197):Test 2 'Sets and Deletes <- /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/event-type ->' took 1 secs: NOT PASSED
+
+[TESTCASE-BEGIN]
++-----------------------------------------------------------------------------------------------------------------------------------+
+| TC_77 -> Sets and Get <- /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/record -> START_STOP |
++-----------------------------------------------------------------------------------------------------------------------------------+
+
+
++---------------------------------------------------------------------------------------------------------------+
+| Step 1: Initiating GNMI Set...                                                                                |
++---------------------------------------------------------------------------------------------------------------+
+| Xpaths:                                                                                                       |
+|     - /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/record - START_STOP |
++---------------------------------------------------------------------------------------------------------------+
+⚠️) [WARNING] => Skipping Cleanup: Testcase Cleanup skipped as GNMI Set failed.
+ERROR(testbase.py:656):testDecoupledLeafLevelSetGetCheck (oc_config_validate.testcases.decoupled_ygv_setget.DecoupledLeafLevelSetGetCheck) - FAIL:
+
+ Traceback (most recent call last):
+  File "/root/surya/git/beta/api-publish/tools/yang_gnmi_validator/oc_config_validate/testcases/decoupled_ygv_setget.py", line 259, in testDecoupledLeafLevelSetGetCheck
+    self.assertTrue(setupdate_result, f"SET FAILED. gNMI Set did not succeed - {set_msg}")
+AssertionError: False is not true : SET FAILED. gNMI Set did not succeed - RPC ERROR. Please check the xpath and ensure it is valid
+
+INFO(runner.py:197):Test 3 'Sets and Get <- /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/record -> START_STOP' took 2 secs: NOT PASSED
+
+[TESTCASE-BEGIN]
++----------------------------------------------------------------------------------------------------------------------------+
+| TC_78 -> Sets and Deletes <- /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/record -> |
++----------------------------------------------------------------------------------------------------------------------------+
+
+
++---------------------------------------------------------------------------------------------------------------+
+| Step 1: Initiating GNMI Set...                                                                                |
++---------------------------------------------------------------------------------------------------------------+
+| Xpaths:                                                                                                       |
+|     - /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/record - START_STOP |
++---------------------------------------------------------------------------------------------------------------+
+1) [VALIDATION_FAILED] => Status Code: RPC ERROR. Please check the xpath and ensure it is valid : /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/record - SET failed (paths/path must be present for deleting). DELETE cannot be tested: RPC ERROR. Please check the xpath and ensure it is valid
+⚠️) [WARNING] => Skipping Cleanup: Testcase Cleanup skipped as GNMI Set failed.
+
+
++------------------------------------------------------------------------------------+
+| TESTCASE RESULT - PASS [Operation FAIL but TC marked PASS - Platform not supported]| 
++------------------------------------------------------------------------------------+
+
+SET-Update => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | FAIL |
++---+------------------------+------+
+
+GET(Post SET) => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | FAIL |
++---+------------------------+------+
+
+DELETE => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | FAIL |
++---+------------------------+------+
+
+GET(Post DELETE) => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | FAIL |
++---+------------------------+------+
+
+FAILED VALIDATIONS:
++---+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| 1 | 1) [VALIDATION_FAILED] => Status Code: RPC ERROR. Please check the xpath and ensure it is valid : /system/aaa/accounting/events/event[event-                                         |
+|   | type=AAA_ACCOUNTING_EVENT_COMMAND]/config/record - SET failed (paths/path must be present for deleting). DELETE cannot be tested: RPC ERROR. Please check the xpath and ensure it is |
+|   | valid                                                                                                                                                                                |
++---+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+ERROR(testbase.py:656):testDecoupledLeafLevelSetGetDeleteGetCheck (oc_config_validate.testcases.decoupled_ygv_delete.DecoupledLeafLevelSetGetDeleteGetCheck) - FAIL:
+
+ Traceback (most recent call last):
+  File "/root/surya/git/beta/api-publish/tools/yang_gnmi_validator/oc_config_validate/testcases/decoupled_ygv_delete.py", line 17, in testDecoupledLeafLevelSetGetDeleteGetCheck
+    self.assertTrue(overall_result, f"Overall Validation FAILED. Details: {details}")
+AssertionError: False is not true : Overall Validation FAILED. Details: ['Status_Code', 'Status_Code', 'Status_Code', 'Status_Code']
+
+INFO(runner.py:197):Test 4 'Sets and Deletes <- /system/aaa/accounting/events/event[event-type=AAA_ACCOUNTING_EVENT_COMMAND]/config/record ->' took 2 secs: NOT PASSED
+
+[TESTCASE-BEGIN]
++----------------------------------------------------------------------------------------------------+
+| TC_79 -> Sets and Get <- /system/aaa/server-groups/server-group[name=group1]/config/name -> group1 |
++----------------------------------------------------------------------------------------------------+
+
+
++--------------------------------------------------------------------------------+
+| Step 1: Initiating GNMI Set...                                                 |
++--------------------------------------------------------------------------------+
+| Xpaths:                                                                        |
+|     - /system/aaa/server-groups/server-group[name=group1]/config/name - group1 |
++--------------------------------------------------------------------------------+
+
+[RPC] => Set - Update -> ['/system/aaa/server-groups/server-group[name=group1]/config']
+
+[GNMI RESPONSE]
+[response {
+  path {
+    origin: "openconfig"
+    elem {
+      name: "system"
+    }
+    elem {
+      name: "aaa"
+    }
+    elem {
+      name: "server-groups"
+    }
+    elem {
+      name: "server-group"
+      key {
+        key: "name"
+        value: "group1"
+      }
+    }
+    elem {
+      name: "config"
+    }
+  }
+  op: UPDATE
+}
+timestamp: 1739159747600457548
+]
+[End of GNMI RESPONSE]
+
+
++--------------------------+
+| VALIDATIONS - SET-Update |
++--------------------------+
+1) [VALIDATION_PASSED] => Status Code: Received response from DUT
+2) [VALIDATION_PASSED] => Schema Compliance: Request Schema for parent /system/aaa/server-groups/server-group[name=group1]/config with {'name': 'group1'} is schema compliant.
+
++-----------------------------------------------------------------------+
+| Step 2: Initiating GNMI Get...                                        |
++-----------------------------------------------------------------------+
+| Xpath:                                                                |
+|     - /system/aaa/server-groups/server-group[name=group1]/config/name |
++-----------------------------------------------------------------------+
+
+[RPC] => Get -> /system/aaa/server-groups/server-group[name=group1]/config/name
+
+[GNMI RESPONSE]
+[notification {
+  timestamp: 1739159757908791305
+  update {
+    path {
+      origin: "openconfig"
+      elem {
+        name: "system"
+      }
+      elem {
+        name: "aaa"
+      }
+      elem {
+        name: "server-groups"
+      }
+      elem {
+        name: "server-group"
+        key {
+          key: "name"
+          value: "group1"
+        }
+      }
+      elem {
+        name: "config"
+      }
+      elem {
+        name: "name"
+      }
+    }
+    val {
+      json_ietf_val: "\"group1\""
+    }
+  }
+}
+]
+[End of GNMI RESPONSE]
+
+
++-------------------+
+| VALIDATIONS - GET |
++-------------------+
+3) [VALIDATION_FAILED] => Schema Compliance: ERROR -> Unable to create model from xpath - for parent /system/aaa/server-groups/server-group[name=group1]/config/name to validate Response-Schema. Ensure the python-bindings are generated properly.
+4) [VALIDATION_FAILED] => Schema Compliance: Response Schema for parent /system/aaa/server-groups/server-group[name=group1]/config/name with {'name': 'group1'} is not schema compliant. Error: 
+5) [VALIDATION_PASSED] => User-Filled Data Validation: /system/aaa/server-groups/server-group[name=group1]/config/name - Expected: {'name': 'group1'}; Found: group1
+
++-----------------------------------------------------------------------+
+| Step 3: Initiating GNMI Delete for cleanup...                         |
++-----------------------------------------------------------------------+
+| Xpaths:                                                               |
+|     - /system/aaa/server-groups/server-group[name=group1]/config/name |
++-----------------------------------------------------------------------+
+
+[RPC] => Set - Update -> ['/system/aaa/server-groups/server-group[name=group1]/config/name']
+
+[GNMI RESPONSE]
+[response {
+  path {
+    origin: "openconfig"
+    elem {
+      name: "system"
+    }
+    elem {
+      name: "aaa"
+    }
+    elem {
+      name: "server-groups"
+    }
+    elem {
+      name: "server-group"
+      key {
+        key: "name"
+        value: "group1"
+      }
+    }
+    elem {
+      name: "config"
+    }
+    elem {
+      name: "name"
+    }
+  }
+  op: DELETE
+}
+timestamp: 1739159761347253242
+]
+[End of GNMI RESPONSE]
+
+🧹) [CLEANUP_PASSED] => Test Cleanup: Testcase Clean_up is successful. Test-env is clean for the next testcase.
+
+
++------------------------------------------------------------------------------------+
+| TESTCASE RESULT - PASS [Operation PASS but TC marked PASS - Platform not supported]| 
++------------------------------------------------------------------------------------+
+
+SET-Update => VALIDATIONS:
++---+------------------------------+------+
+| 1 | Status Code Validation       | PASS |
++---+------------------------------+------+
+| 2 | Schema Compliance Validation | PASS |
++---+------------------------------+------+
+
+GET => VALIDATIONS:
++---+------------------------------+------+
+| 1 | Status Code Validation       | PASS |
++---+------------------------------+------+
+| 2 | Schema Compliance Validation | FAIL |
++---+------------------------------+------+
+| 3 | Data Validation              | PASS |
++---+------------------------------+------+
+
+FAILED VALIDATIONS:
++---+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| 1 | 3) [VALIDATION_FAILED] => Schema Compliance: ERROR -> Unable to create model from xpath - for parent /system/aaa/server-groups/server-group[name=group1]/config/name to validate |
+|   | Response-Schema. Ensure the python-bindings are generated properly.                                                                                                              |
++---+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| 2 | 4) [VALIDATION_FAILED] => Schema Compliance: Response Schema for parent /system/aaa/server-groups/server-group[name=group1]/config/name with {'name': 'group1'} is not schema    |
+|   | compliant. Error:                                                                                                                                                                |
++---+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+ERROR(testbase.py:656):testDecoupledLeafLevelSetGetCheck (oc_config_validate.testcases.decoupled_ygv_setget.DecoupledLeafLevelSetGetCheck) - FAIL:
+
+ Traceback (most recent call last):
+  File "/root/surya/git/beta/api-publish/tools/yang_gnmi_validator/oc_config_validate/testcases/decoupled_ygv_setget.py", line 265, in testDecoupledLeafLevelSetGetCheck
+    self.assertTrue(overall_result, f"Overall Validation FAILED. Details: {details}")
+AssertionError: False is not true : Overall Validation FAILED. Details: ['Schema_Compliance']
+
+INFO(runner.py:197):Test 5 'Sets and Get <- /system/aaa/server-groups/server-group[name=group1]/config/name -> group1' took 26 secs: NOT PASSED
+
+[TESTCASE-BEGIN]
++-------------------------------------------------------------------------------------------------+
+| TC_80 -> Sets and Deletes <- /system/aaa/server-groups/server-group[name=group1]/config/name -> |
++-------------------------------------------------------------------------------------------------+
+
+
++--------------------------------------------------------------------------------+
+| Step 1: Initiating GNMI Set...                                                 |
++--------------------------------------------------------------------------------+
+| Xpaths:                                                                        |
+|     - /system/aaa/server-groups/server-group[name=group1]/config/name - group1 |
++--------------------------------------------------------------------------------+
+
+[RPC] => Set - Update -> ['/system/aaa/server-groups/server-group[name=group1]/config']
+
+[GNMI RESPONSE]
+[response {
+  path {
+    origin: "openconfig"
+    elem {
+      name: "system"
+    }
+    elem {
+      name: "aaa"
+    }
+    elem {
+      name: "server-groups"
+    }
+    elem {
+      name: "server-group"
+      key {
+        key: "name"
+        value: "group1"
+      }
+    }
+    elem {
+      name: "config"
+    }
+  }
+  op: UPDATE
+}
+timestamp: 1739159773743939707
+]
+[End of GNMI RESPONSE]
+
+
++--------------------------+
+| VALIDATIONS - SET-Update |
++--------------------------+
+1) [VALIDATION_PASSED] => Status Code: /system/aaa/server-groups/server-group[name=group1]/config/name - Set for required config to test DELETE is successful.
+
++-----------------------------------------------------------------------+
+| Step 2: Initiating GNMI Get...                                        |
++-----------------------------------------------------------------------+
+| Xpath:                                                                |
+|     - /system/aaa/server-groups/server-group[name=group1]/config/name |
++-----------------------------------------------------------------------+
+
+[RPC] => Get -> /system/aaa/server-groups/server-group[name=group1]/config/name
+
+[GNMI RESPONSE]
+[notification {
+  timestamp: 1739159783762784282
+  update {
+    path {
+      origin: "openconfig"
+      elem {
+        name: "system"
+      }
+      elem {
+        name: "aaa"
+      }
+      elem {
+        name: "server-groups"
+      }
+      elem {
+        name: "server-group"
+        key {
+          key: "name"
+          value: "group1"
+        }
+      }
+      elem {
+        name: "config"
+      }
+      elem {
+        name: "name"
+      }
+    }
+    val {
+      json_ietf_val: "\"group1\""
+    }
+  }
+}
+]
+[End of GNMI RESPONSE]
+
+
++-------------------+
+| VALIDATIONS - GET |
++-------------------+
+2) [VALIDATION_PASSED] => Status Code: {full_xpath} - GET is successful post set. Config is in place to test the actual DELETE operation.
+
++-----------------------------------------------------------------------+
+| Step 3: Initiating GNMI Delete...                                     |
++-----------------------------------------------------------------------+
+| Xpaths:                                                               |
+|     - /system/aaa/server-groups/server-group[name=group1]/config/name |
++-----------------------------------------------------------------------+
+
+[RPC] => Set - Update -> ['/system/aaa/server-groups/server-group[name=group1]/config/name']
+
+[GNMI RESPONSE]
+[response {
+  path {
+    origin: "openconfig"
+    elem {
+      name: "system"
+    }
+    elem {
+      name: "aaa"
+    }
+    elem {
+      name: "server-groups"
+    }
+    elem {
+      name: "server-group"
+      key {
+        key: "name"
+        value: "group1"
+      }
+    }
+    elem {
+      name: "config"
+    }
+    elem {
+      name: "name"
+    }
+  }
+  op: DELETE
+}
+timestamp: 1739159787113254512
+]
+[End of GNMI RESPONSE]
+
+
++----------------------+
+| VALIDATIONS - DELETE |
++----------------------+
+3) [VALIDATION_PASSED] => Status Code: /system/aaa/server-groups/server-group[name=group1]/config/name - DELETE operation returned success
+
++-----------------------------------------------------------------------+
+| Step 4: Initiating GNMI Get...                                        |
++-----------------------------------------------------------------------+
+| Xpath:                                                                |
+|     - /system/aaa/server-groups/server-group[name=group1]/config/name |
++-----------------------------------------------------------------------+
+
++--------------------------------------------------------------------------------------------------+
+| VALIDATIONS - GET(Post DELETE) - /system/aaa/server-groups/server-group[name=group1]/config/name |
++--------------------------------------------------------------------------------------------------+
+4) [VALIDATION_PASSED] => Status Code: /system/aaa/server-groups/server-group[name=group1]/config/name - GET failed post delete - DELETE is successful
+
++-----------------------------------------------------------------------+
+| Step 5: Initiating GNMI Delete for cleanup...                         |
++-----------------------------------------------------------------------+
+| Xpaths:                                                               |
+|     - /system/aaa/server-groups/server-group[name=group1]/config/name |
++-----------------------------------------------------------------------+
+
+[RPC] => Set - Update -> ['/system/aaa/server-groups/server-group[name=group1]/config/name']
+
+[GNMI RESPONSE]
+[response {
+  path {
+    origin: "openconfig"
+    elem {
+      name: "system"
+    }
+    elem {
+      name: "aaa"
+    }
+    elem {
+      name: "server-groups"
+    }
+    elem {
+      name: "server-group"
+      key {
+        key: "name"
+        value: "group1"
+      }
+    }
+    elem {
+      name: "config"
+    }
+    elem {
+      name: "name"
+    }
+  }
+  op: DELETE
+}
+timestamp: 1739159800254245115
+]
+[End of GNMI RESPONSE]
+
+🧹) [CLEANUP_PASSED] => Test Cleanup: Testcase Clean_up is successful. Test-env is clean for the next testcase.
+
+
++------------------------------------------------------------------------------------+
+| TESTCASE RESULT - FAIL [Operation FAIL but TC marked PASS - Platform not supported]| 
++------------------------------------------------------------------------------------+
+
+SET-Update => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | PASS |
++---+------------------------+------+
+
+GET(Post SET) => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | PASS |
++---+------------------------+------+
+
+DELETE => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | PASS |
++---+------------------------+------+
+
+GET(Post DELETE) => VALIDATIONS:
++---+------------------------+------+
+| 1 | Status Code Validation | PASS |
++---+------------------------+------+
+INFO(runner.py:197):Test 6 'Sets and Deletes <- /system/aaa/server-groups/server-group[name=group1]/config/name ->' took 39 secs: PASSED
