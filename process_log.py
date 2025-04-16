@@ -176,34 +176,40 @@ def convert_validating_eom_sections(text):
 
 def highlight_testcase_result(match, tc_id):
     original_text = match.group(0)
-    result_match = re.search(r"(TESTCASE RESULT\s*-)\s*(PASS|FAIL)", original_text)
+    result_label = match.group(1)
+    result_text = match.group(2)
 
-    if result_match:
-        result_label = result_match.group(1)
-        result_text = result_match.group(2)
-        color = "green" if result_text == "PASS" else "red"
+    color = "green" if result_text == "PASS" else "red"
 
-        highlighted_result = f'<span style="color: {color}; font-weight: bold;">{result_label} {result_text}</span>'
-        colored_tc_id = f'<span style="color: {color}; font-weight: bold;">{tc_id}</span>'
+    if result_text == "PASS":
+        # Check for context in the full match
+        if "[Operation FAIL" in original_text:
+            color = "orange"
+        elif "[Operation PASS" in original_text:
+            color = "#1e79ff"
 
-        return highlighted_result, colored_tc_id
+    highlighted_result = f'<span style="color: {color}; font-weight: bold;">{html.escape(original_text)}</span>'
+    colored_tc_id = f'<span style="color: {color}; font-weight: bold;">{html.escape(tc_id)}</span>'
+    return highlighted_result, colored_tc_id,color
+
+
 
 
 # This will be used to replace the result and color the TC_ID
 def inject_result(match, tc_id):
-    result_html, colored_tc_id = highlight_testcase_result(match, tc_id)
+    result_html, colored_tc_id,color = highlight_testcase_result(match, tc_id)
     # You can return only result_html here
     return result_html
     
-    # Replace the TESTCASE RESULT line
-    processed = re.sub(
-        r"(TESTCASE RESULT\s*-.*?\b(PASS|FAIL)\b)",
-        lambda _: result_html,
-        processed,
-        flags=re.MULTILINE | re.DOTALL
-    )
+    # # Replace the TESTCASE RESULT line
+    # processed = re.sub(
+    #     r"(TESTCASE RESULT\s*-.*?\b(PASS|FAIL)\b)",
+    #     lambda _: result_html,
+    #     processed,
+    #     flags=re.MULTILINE | re.DOTALL
+    # )
 
-    return processed
+    # return processed
 
 
 
@@ -221,9 +227,23 @@ def parse_log_content(content):
         tc_id = tc_id_match.group(1)
 
         # Extract Testcase Result (PASS/FAIL) from the raw testcase content
-        result_match = re.search(r"TESTCASE RESULT\s*-\s*(PASS|FAIL)", testcase, re.IGNORECASE)
-        result_text = result_match.group(1).upper() if result_match else "UNKNOWN"
-        status_class = "pass" if result_text == "PASS" else "fail"
+        result_match = re.search(r"(TESTCASE RESULT\s*-\s*)(PASS|FAIL)(\s*\[.*?\])?", testcase, re.IGNORECASE)
+        # r"(TESTCASE RESULT\s*-\s*)(PASS|FAIL)(?:\s*\[.*?\])?"
+        result_text = result_match.group(2).upper() if result_match else "UNKNOWN"
+        original_text = result_match.group(3) if result_match and result_match.group(3) != None else ""
+        print(result_text, original_text)
+        if result_text == "PASS":
+            # Check for context in the full match
+            if "[Operation FAIL" in original_text:
+                status_class = "promoted_pass"
+            elif "[Operation PASS" in original_text:
+                status_class = "anomaly_pass"
+            else:
+                status_class = "pass"
+        else:
+            status_class = "fail"
+
+        #status_class = "pass" if result_text == "PASS" else "fail"
         color = "green" if result_text == "PASS" else "red"
 
         # Build colored TC_ID without adding duplicate text—just modify the existing one.
@@ -326,11 +346,15 @@ def parse_log_content(content):
 
         # ✅ Colorize TESTCASE RESULT - PASS (Green) / FAIL (Red)
         processed_testcase = re.sub(
-            r"(TESTCASE RESULT\s*-.*?\b(PASS|FAIL)\b)",  # Match TESTCASE RESULT - PASS/FAIL
-            lambda match: inject_result(match, tc_id),  # Pass tc_id into the function
+            r"(TESTCASE RESULT\s*-\s*)(PASS|FAIL)(?:\s*\[.*?\])?",
+            lambda match: inject_result(match, tc_id),
             processed_testcase,
-            flags=re.MULTILINE | re.DOTALL
+            flags=re.MULTILINE
         )
+
+
+
+
         #tryings
 
         processed_testcase = re.sub(
@@ -429,7 +453,7 @@ def parse_log_content(content):
         # )
 
         final_html = (
-            f'<div id="{tc_id}" class="testcase-section" data-status="{status_class}">'
+            f'<div id="{tc_id}" class="testcase-section" data-status="{status_class}" data-color="{color}">'
             f'<br>{processed_testcase}</div>'
         )
      
