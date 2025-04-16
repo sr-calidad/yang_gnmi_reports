@@ -507,9 +507,12 @@ details[open] {
           const color = section?.getAttribute('data-color') || 'green';
 
     
-          const icon = status === 'fail'  
-          ? '<span style="color: red;">X</span>'
-          : `<span style="color: ${color}; font-size: 15px;">&#10003;</span>`;
+          const iconColor = status === 'anomaly_pass' ? '#1e79ff' :
+                  status === 'promoted_pass' ? 'orange' : color;
+const icon = status === 'fail'
+  ? '<span style="color: red;">X</span>'
+  : `<span style="color: ${iconColor}; font-size: 15px;">&#10003;</span>`;
+
 ;
 
           const li = document.createElement("li");
