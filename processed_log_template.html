@@ -393,6 +393,13 @@ details[open] {
     .testcase-box.fail h5 {
       color: red;
     }
+    .testcase-box.promoted_pass h5{
+      color: orange;
+    }
+
+    .testcase-box.anomaly_pass h5{
+      color: #1e79ff;
+    }
 
     .status-icon.pass {
       color: green;
@@ -400,6 +407,8 @@ details[open] {
     .status-icon.fail {
       color: red;
     }
+
+
 
   </style>
   </head>
@@ -489,12 +498,19 @@ details[open] {
 
           const parser = new DOMParser();
           const doc = parser.parseFromString(rawHTML, 'text/html');
-          const status = doc.querySelector('.testcase-section')?.getAttribute('data-status') || 'pass';
+          // const status = doc.querySelector('.testcase-section')?.getAttribute('data-status') || 'pass';
+
+          // const parser = new DOMParser();
+          // const doc = parser.parseFromString(rawHTML, 'text/html');
+          const section = doc.querySelector('.testcase-section');
+          const status = section?.getAttribute('data-status') || 'pass';
+          const color = section?.getAttribute('data-color') || 'green';
 
     
-          const icon = status === 'fail'
-          ? '<span style="color: red;">❌</span>'
-          : '<span style="color: green;">✔</span>';
+          const icon = status === 'fail'  
+          ? '<span style="color: red;">X</span>'
+          : `<span style="color: ${color}; font-size: 15px;">&#10003;</span>`;
+;
 
           const li = document.createElement("li");
           li.innerHTML = `${tc}<span style="float: right;">${icon}</span>`;
