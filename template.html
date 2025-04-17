@@ -421,7 +421,7 @@ div.dataTables_wrapper div.dataTables_info {
         clearTimeout(hideTooltipTimeout); // Prevent immediate hiding
 
         const logText = $(this).text().trim();
-        if (logText.length > 0) {
+        if ((logText.length > 0 ) && (logText != "View log")) {
             activeCell = $(this);
 
             $('#logTooltip').text(logText).css({
