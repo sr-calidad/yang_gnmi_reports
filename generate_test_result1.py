@@ -235,14 +235,21 @@ def dict_data_handling(files, filename_result):
                 platform_val = platform_support.get(xpath, "NA")
                 platform_val1 = platform_val if platform_val != "NA" else "Not Applicable"
                
-                inner_logs = ""
+                # inner_logs = ""
                 # if success == "FAIL":
-                for inner_result in result.get("results", []):
-                    log_text = inner_result.get("log", "N/A")
-                    inner_logs += log_text + "<br/>"
+                #     for inner_result in result.get("results", []):
+                #         log_text = inner_result.get("log", "N/A")
+                #         inner_logs += log_text + "<br/>"
                 # else:
                 #     inner_logs = ""
-
+                if success == "FAIL":
+                    inner_logs = "".join(
+                        inner_result.get("log", "N/A") + "<br/>"
+                            for inner_result in result.get("results", [])
+                        )
+                    link_text = inner_logs
+                else:
+                    link_text = "View log"
                 detail_rows += f"""
                 <tr>
                     <td style="text-align: right;">{s_no}</td>
@@ -255,7 +262,7 @@ def dict_data_handling(files, filename_result):
                     <td style="color: {verdict_color}; font-weight: bold;">{verdict}</td>
                     <td>{verdict_reason}</td>
                     <td>
-                        <a href="LOG_REPORT_PLACEHOLDER?test_id={unique_test_id}" onclick="openLogInNewTab(event, '{unique_test_id}', this)">{inner_logs}</a>
+                        <a href="LOG_REPORT_PLACEHOLDER?test_id={unique_test_id}" onclick="openLogInNewTab(event, '{unique_test_id}', this)">{link_text}</a>
                 </td>
                 </tr>
                 """
@@ -384,13 +391,21 @@ def dict_data_handling(files, filename_result):
             verdict = result.get("verdict", "N/A")
             verdict_reason = result.get("verdict_reason", "N/A")
             verdict_color = result.get("verdict_color", "black")
-            inner_logs = ""
+            # inner_logs = ""
             # if success == "FAIL":
-            for inner_result in result.get("results", []):
-                log_text = inner_result.get("log", "N/A")
-                inner_logs += log_text + "<br/>"
+            #     for inner_result in result.get("results", []):
+            #         log_text = inner_result.get("log", "N/A")
+            #         inner_logs += log_text + "<br/>"
             # else:
             #     inner_logs = ""
+            if success == "FAIL":
+                inner_logs = "".join(
+                    inner_result.get("log", "N/A") + "<br/>"
+                        for inner_result in result.get("results", [])
+                    )
+                link_text = inner_logs
+            else:
+                link_text = "View log"
             detail_rows += f"""
             <tr>
             <td style="text-align: right;">{s_no}</td>
@@ -402,7 +417,7 @@ def dict_data_handling(files, filename_result):
             <td>{platform_val1}</td>
             <td style="color: {verdict_color}; font-weight: bold;">{verdict}</td>
             <td>{verdict_reason}</td>
-             <td> <a href="javascript:void(0)" onclick='parent.postMessage({{"action": "navigateToLogReport", "testId": "{unique_test_id}"}}, "*");'>{inner_logs}</a></td>
+             <td> <a href="javascript:void(0)" onclick='parent.postMessage({{"action": "navigateToLogReport", "testId": "{unique_test_id}"}}, "*");'>{link_text}</a></td>
             </tr>
             """
             s_no += 1
