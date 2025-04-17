@@ -236,12 +236,12 @@ def dict_data_handling(files, filename_result):
                 platform_val1 = platform_val if platform_val != "NA" else "Not Applicable"
                
                 inner_logs = ""
-                if success == "FAIL":
-                    for inner_result in result.get("results", []):
-                        log_text = inner_result.get("log", "N/A")
-                        inner_logs += log_text + "<br/>"
-                else:
-                    inner_logs = ""
+                # if success == "FAIL":
+                for inner_result in result.get("results", []):
+                    log_text = inner_result.get("log", "N/A")
+                    inner_logs += log_text + "<br/>"
+                # else:
+                #     inner_logs = ""
 
                 detail_rows += f"""
                 <tr>
@@ -385,12 +385,12 @@ def dict_data_handling(files, filename_result):
             verdict_reason = result.get("verdict_reason", "N/A")
             verdict_color = result.get("verdict_color", "black")
             inner_logs = ""
-            if success == "FAIL":
-                for inner_result in result.get("results", []):
-                    log_text = inner_result.get("log", "N/A")
-                    inner_logs += log_text + "<br/>"
-            else:
-                inner_logs = ""
+            # if success == "FAIL":
+            for inner_result in result.get("results", []):
+                log_text = inner_result.get("log", "N/A")
+                inner_logs += log_text + "<br/>"
+            # else:
+            #     inner_logs = ""
             detail_rows += f"""
             <tr>
             <td style="text-align: right;">{s_no}</td>
