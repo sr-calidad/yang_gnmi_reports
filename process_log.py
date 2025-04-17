@@ -135,17 +135,6 @@ def convert_failed_validations_to_html(match):
         after='<br><div style="margin-top: 15px; clear: both;"></div>'
     )
 
-# def convert_validating_eom_sections(text):
-#     pattern = re.compile(
-#         r"(\+[-]+?\+\s*\n\|\s*(Validating EOM, Frequency & Timestamps for -.*)\s*\|\s*\n\+[-]+?\+)"  # Header
-#         r"([\s\S]+?)(?="
-#         r"(?:\n\+[-]+?\+\s*\n\|\s*Validating EOM, Frequency & Timestamps for -|"  # Next EOM block
-#         r"\n\+[-]+?\+\s*\n\|\s*TESTCASE RESULT|"  # TESTCASE RESULT block
-#         r"\n\+[-]+?\+\s*\n\|\s*Time Intervals\s*\||"
-#         r"\n<details\s+class=\"collapsible-section\">\s*<summary\s+class=\"collapsible-summary\"><b>View Time Intervals Details</b></summary>|"
-#         r"\Z))",
-#         flags=re.MULTILINE
-#     )
 def convert_validating_eom_sections(text):
     pattern = re.compile(
         r"(\+[-]+?\+\s*\n\|\s*(Validating EOM, Frequency & Timestamps for -.*)\s*\|\s*\n\+[-]+?\+)"  # Header
@@ -200,17 +189,6 @@ def inject_result(match, tc_id):
     result_html, colored_tc_id,color = highlight_testcase_result(match, tc_id)
     # You can return only result_html here
     return result_html
-    
-    # # Replace the TESTCASE RESULT line
-    # processed = re.sub(
-    #     r"(TESTCASE RESULT\s*-.*?\b(PASS|FAIL)\b)",
-    #     lambda _: result_html,
-    #     processed,
-    #     flags=re.MULTILINE | re.DOTALL
-    # )
-
-    # return processed
-
 
 
 def parse_log_content(content):
@@ -228,7 +206,6 @@ def parse_log_content(content):
 
         # Extract Testcase Result (PASS/FAIL) from the raw testcase content
         result_match = re.search(r"(TESTCASE RESULT\s*-\s*)(PASS|FAIL)(\s*\[.*?\])?", testcase, re.IGNORECASE)
-        # r"(TESTCASE RESULT\s*-\s*)(PASS|FAIL)(?:\s*\[.*?\])?"
         result_text = result_match.group(2).upper() if result_match else "UNKNOWN"
         original_text = result_match.group(3) if result_match and result_match.group(3) != None else ""
         print(result_text, original_text)
@@ -282,18 +259,6 @@ def parse_log_content(content):
             processed_testcase,
             flags=re.MULTILINE | re.DOTALL
         )
-        # processed_testcase = re.sub(
-        #     r"(\+\-+\+\n\|\s*(ðŸ›\s+Manual Repro Info:.*?)\s*\|\n\+\-+\+\n)([\s\S]*?)\n?\[END OF REPRO-INFO\]\n?",  
-        #     lambda m: convert_section_to_html(m.group(2), m.group(3).strip()),  
-        #     processed_testcase,
-        #     flags=re.MULTILINE | re.DOTALL
-        # )
-        # processed_testcase = re.sub(
-        #     r"(\+\-+\+\s*\n\|\s*(ðŸ›\s+Manual Repro Info:.*?)\s*\|\n\+\-+\+\s*\n)([\s\S]*?)\n?\[END OF REPRO-INFO\]\n?",  
-        #     lambda m: convert_section_to_html(m.group(2), m.group(3).strip()),  
-        #     processed_testcase,
-        #     flags=re.MULTILINE | re.DOTALL
-        # )
         # In the convert_validating_eom_sections function, modify the regex pattern
         processed_testcase = re.sub(
             r"(\+[-]+\+\s*\n\|\s*(🛠\s+Manual Repro Info:.*?)\s*\|\s*\n\+[-]+\+\s*\n)"  # Header with 🛠
@@ -303,13 +268,6 @@ def parse_log_content(content):
             flags=re.MULTILINE | re.DOTALL
         )
 
-        # processed_testcase = re.sub(
-        #     r"(ðŸ›\s+Manual Repro Info[\s\S]*?)\n?\[END OF REPRO-INFO\]\n?",
-        #     lambda m: convert_section_to_html("View Repro Info", m.group(1).strip()),  
-        #     processed_testcase,
-        #     flags=re.MULTILINE | re.DOTALL
-        # )
-
         #working code
         processed_testcase = re.sub(
                 r"(\+[-]+?\+\s*\| Coverage Mismatch Details \|\s*\+[-]+?\+\n)",
@@ -317,22 +275,6 @@ def parse_log_content(content):
                 processed_testcase,
                 flags=re.MULTILINE
             )
-        
-        # processed_testcase = re.sub(
-        #     r"(\+[-]+?\+\s*\| Coverage Mismatch Details \|\s*\+[-]+?\+\n)"  # Match the header
-        #     r"((?:\|.*\n)+)"  # Match only the table rows (lines starting with '|')
-        #     r"(\+[-]+?\+\s*\| Additional Paths|\+[-]+?\+\s*\| Step|\[TESTCASE-BEGIN\]|\Z)",  # Stop at Additional Paths, Step, or new testcase
-        #     lambda m: convert_section_to_html("View Coverage Mismatch Details", clean_ascii_table(m.group(2))),
-        #     processed_testcase,
-        #     flags=re.MULTILINE | re.DOTALL
-        # )
-        #working code
-        # processed_testcase = re.sub(
-        #     r"(\+[-]+?\+\s*\| Additional Paths Found.*?\|\s*\+[-]+?\+\n)([\s\S]+?)(?=\n\+[-]+?\+|\[TESTCASE-BEGIN\]|\Z)",
-        #     lambda m: convert_section_to_html("View Additional Paths Found", clean_ascii_table(m.group(2))),
-        #     processed_testcase,
-        #     flags=re.MULTILINE | re.DOTALL
-        # )
 
         processed_testcase = re.sub(
             r"(\+[-]+?\+\s*\| Additional Paths Found in update that are not defined in schema.*?\|\s*\+[-]+?\+\n)"
@@ -342,8 +284,6 @@ def parse_log_content(content):
             flags=re.MULTILINE | re.DOTALL
         )
 
-        
-
         # ✅ Colorize TESTCASE RESULT - PASS (Green) / FAIL (Red)
         processed_testcase = re.sub(
             r"(TESTCASE RESULT\s*-\s*)(PASS|FAIL)(?:\s*\[.*?\])?",
@@ -351,11 +291,6 @@ def parse_log_content(content):
             processed_testcase,
             flags=re.MULTILINE
         )
-
-
-
-
-        #tryings
 
         processed_testcase = re.sub(
             r"(FAILED VALIDATIONS:\n)((?:[+|].*(?:\n|$))+)",
@@ -373,30 +308,6 @@ def parse_log_content(content):
             processed_testcase,
             flags=re.MULTILINE
         )
-        # wokring
-        # processed_testcase = re.sub(
-        #     r"(\+\-+\+\s*\n\|\s*Time Intervals\s*\|\s*\n\+\-+\+\n)"
-        #     r"([\s\S]+?)(?=(?:\+\-+\+\s*\n\|\s*Time Intervals\s*\||\n\+\-+\+\s*\n(?:\| VALIDATIONS|\| Sample-Interval|\| TESTCASE RESULT|\[TESTCASE-BEGIN\]|\|\s*Validating EOM, Frequency & Timestamps for -)|\Z))",
-        #     lambda m: build_collapsible_section(
-        #         "View Time Intervals Details",
-        #         clean_ascii_table(m.group(1)) + clean_ascii_table(m.group(2)),
-        #         after='<br><div style=" margin-bottom: 10px; clear: both;"></div>'
-        #     ),
-        #     processed_testcase,
-        #     flags=re.MULTILINE | re.DOTALL
-        # )
-        # processed_testcase = re.sub(
-        #     r"(\+\-+\+\s*\n\|\s*Time Intervals\s*\|\s*\n\+\-+\+\n)"
-        #     r"([\s\S]+?)(?=(?:\+\-+\+\s*\n\|\s*Time Intervals\s*\||"
-        #     r"\n\+[-]+\+\s*\n\|\s*Step\s*\d+:|"  # Detect Step headers
-        #     r"\n\|\s*VALIDATIONS|\| Sample-Interval|"
-        #     r"\n\[TESTCASE-BEGIN\]|\Z))",  # Added Step check
-        #     lambda m: build_collapsible_section(
-        #         "View Time Intervals Details",
-        #         clean_ascii_table(m.group(1)) + clean_ascii_table(m.group(2))),
-        #     processed_testcase,
-        #     flags=re.MULTILINE | re.DOTALL
-        # )
         processed_testcase = re.sub(
             r"(\+\-+\+\s*\n\|\s*Time Intervals\s*\|\s*\n\+\-+\+\n)"
             r"([\s\S]+?)(?=(?:\+\-+\+\s*\n\|\s*Time Intervals\s*\||"
@@ -417,14 +328,6 @@ def parse_log_content(content):
             flags=re.MULTILINE | re.DOTALL
         )
 
-        # processed_testcase = re.sub(
-        #     r"(\[RPC\][\s\S]*?)\n?\[END OF RPC\]",  # Capture from `[RPC]` until `[END OF RPC]`
-        #     lambda m: convert_section_to_html("View RPC Info", m.group(1).strip()),  
-        #     processed_testcase,
-        #     flags=re.MULTILINE | re.DOTALL
-        # )
-
-
         processed_testcase = convert_validating_eom_sections(processed_testcase)
 
         processed_testcase = re.sub(
@@ -437,20 +340,12 @@ def parse_log_content(content):
             flags=re.MULTILINE | re.DOTALL
         )
 
-        
-
         processed_testcase = re.sub(
             r'((?:\A|(?<=\n))(?:[+|].*(?:\n|$))+)',
             lambda m: clean_ascii_table(m.group(1)),
             processed_testcase,
             flags=re.MULTILINE
         )
-       
-        # processed_testcase = re.sub(
-        #     r"\[RPC\] => ([^\n]*)",
-        #     r"<strong>[RPC] => \1</strong>",
-        #     processed_testcase
-        # )
 
         final_html = (
             f'<div id="{tc_id}" class="testcase-section" data-status="{status_class}" data-color="{color}">'
@@ -471,7 +366,7 @@ def parse_log_files_from_directory(directory):
     combined_content = ""
     model_info =""
     for filename in os.listdir(directory):
-        if filename.endswith("_tc_result.log"):
+        if filename.endswith("-tc_result.log"):
             filepath = os.path.join(directory, filename)
             try:
                 with open(filepath, 'r', encoding='utf-8') as f:
@@ -496,13 +391,7 @@ def parse_log_files_from_directory(directory):
 
 def generate_html(data, input_path,model_info, output_folder="logs"):
     # Determine the base directory of the script (2 levels up if inside Report_Generators)
-    # base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
     base_dir = os.path.dirname(os.path.abspath(__file__)) #replaced with abover line 
-
-
-    # Define the logs folder at the correct level
-    # logs_dir = os.path.join(base_dir, output_folder)
-    # os.makedirs(output_folder, exist_ok=True) 
     logs_dir = os.path.join(base_dir, "logs")#replaced with abover line 
     os.makedirs(logs_dir, exist_ok=True)
 
@@ -543,9 +432,6 @@ def generate_html(data, input_path,model_info, output_folder="logs"):
     model_heading = f'<span style="font-size:14px; margin:0 5px;">&#9654;</span>Model : {model_info}' if model_info else ''
     rendered_html = rendered_html.replace("{{model_heading}}", model_heading)
 
-
-
-
     with open(output_file, 'w', encoding='utf-8',errors='ignore') as f:
         f.write(rendered_html)
 
@@ -560,7 +446,7 @@ if __name__ == "__main__":
     model_info =""
 
     try:
-        if os.path.isfile(input_path) and input_path.endswith("_tc_result.log"):
+        if os.path.isfile(input_path) and input_path.endswith("-tc_result.log"):
             with open(input_path, 'r', encoding='utf-8') as f:
                 log_content = f.read()
             parsed_data = parse_log_content(log_content)
