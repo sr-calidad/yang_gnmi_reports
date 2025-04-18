@@ -21,7 +21,7 @@ def parse_log_files_from_directory(directory):
     combined_data = []  # Initialize as an empty list to hold all the JSON data
     
     for filename in os.listdir(directory):
-        if filename.endswith("_result.json"):
+        if filename.endswith("-tc_result.json"):
             filepath = os.path.join(directory, filename)
             try:
                 with open(filepath, 'r', encoding='utf-8') as f:
@@ -269,8 +269,7 @@ def dict_data_handling(files, filename_result):
                             ); return false;">
                             {link_text}
                         </a>
-                        </td>
-
+                </td>
                 </tr>
                 """
                 s_no += 1
@@ -424,16 +423,15 @@ def dict_data_handling(files, filename_result):
             <td>{platform_val1}</td>
             <td style="color: {verdict_color}; font-weight: bold;">{verdict}</td>
             <td>{verdict_reason}</td>
-             <td>
-  <a href="#"
-     onclick="window.open(
-       window.top.location.href.split('?')[0] + '?test_id={unique_test_id}',
-       '_blank'
-     ); return false;">
-    {link_text}
-  </a>
-</td>
-   </tr>
+             <td> <a href="#"
+                onclick="window.open(
+                window.top.location.href.split('?')[0] + '?test_id={unique_test_id}',
+                '_blank'
+                ); return false;">
+                {link_text}
+            </a>
+            </td>
+            </tr>
             """
             s_no += 1
 
@@ -515,7 +513,7 @@ def main():
     valid_files = []
 
     for path in input_paths:
-        if os.path.isfile(path) and path.endswith("_result.json"):
+        if os.path.isfile(path) and path.endswith("-tc_result.json"):
             try:
                 with open(path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
@@ -530,7 +528,7 @@ def main():
                 print(f"❌ Error reading {path}: {e}")
                 sys.exit(1)
         else:
-            print(f"❌ Invalid input: {path} (must be a .json file ending with _result.json)")
+            print(f"❌ Invalid input: {path} (must be a .json file ending with -tc_result.json)")
             sys.exit(1)
 
     if not valid_files:
