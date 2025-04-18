@@ -50,6 +50,7 @@
       text-align: center;
       z-index: 1000; /* Ensures it stays on top */
       font-family: "Times New Roman", serif;
+      border-bottom: 4px solid;
       
       
     }
@@ -421,7 +422,7 @@ div.dataTables_wrapper div.dataTables_info {
         clearTimeout(hideTooltipTimeout); // Prevent immediate hiding
 
         const logText = $(this).text().trim();
-        if (logText.length > 0) {
+        if ((logText.length > 0 ) && (logText != "View log")) {
             activeCell = $(this);
 
             $('#logTooltip').text(logText).css({
@@ -495,7 +496,9 @@ div.dataTables_wrapper div.dataTables_info {
 });
 
 function openLogInNewTab(event, testId, linkElement) {
+   // Stop
     // Prevent the default link behavior (which is navigating to the link)
+    console.log("event",event)
     event.preventDefault();
 
     // Extract the href from the clicked link element
