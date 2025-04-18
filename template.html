@@ -77,7 +77,7 @@
         overflow-wrap: break-word;
     }
     /* Adjust the TestCase column width */
-    th:nth-child(9), td:nth-child(9) { 
+    th:nth-child(7), td:nth-child(7) { 
       width: auto;   
       max-width: 3000px; /* Adjust width as needed */
         white-space: normal;
@@ -95,7 +95,7 @@
       }
 
     /* Reduce the Log column width */
-    th:nth-child(10), td:nth-child(10) { 
+    th:nth-child(8), td:nth-child(8) { 
         max-width: 200px; /* Adjust width as needed */
         white-space: nowrap;   /* Prevent text from wrapping */
         overflow: hidden;
@@ -241,8 +241,8 @@ div.dataTables_wrapper div.dataTables_info {
                     <th>TestCase</th>
                     <th>GNMI Operation</th>
                     <th>Status</th>
-                    <th>Deviation</th>
-                    <th>Platform (<strong>xpath_p_result </strong>)</th>
+                    <!-- <th>Deviation</th>
+                    <th>Platform (<strong>xpath_p_result </strong>)</th> -->
                     <th>Result</th>
                     <th>Comments</th>
                     <th>Log</th>
@@ -306,8 +306,7 @@ div.dataTables_wrapper div.dataTables_info {
         });
 
         // Let td:eq(7) retain the color from the inline style (from Python)
-    }
-,
+    },
         "drawCallback": function(settings) {
           // Update the S.No column to reflect the current order/page
           var api = this.api();
@@ -418,7 +417,7 @@ div.dataTables_wrapper div.dataTables_info {
     let hideTooltipTimeout;
 
     // Show tooltip on hover & adjust position dynamically
-    $('#example tbody').on('mouseenter', 'td:nth-child(10)', function () {
+    $('#example tbody').on('mouseenter', 'td:nth-child(8)', function () {
         clearTimeout(hideTooltipTimeout); // Prevent immediate hiding
 
         const logText = $(this).text().trim();
@@ -453,7 +452,7 @@ div.dataTables_wrapper div.dataTables_info {
     });
 
     // Hide tooltip when leaving the "Log" column or tooltip
-    $('#example tbody').on('mouseleave', 'td:nth-child(10)', function () {
+    $('#example tbody').on('mouseleave', 'td:nth-child(8)', function () {
     hideTooltipTimeout = setTimeout(() => {
         $('#logTooltip').stop(true, true).fadeOut(100, function () {
             $(this).css({ display: 'none' });
@@ -476,7 +475,7 @@ div.dataTables_wrapper div.dataTables_info {
 
     // Hide tooltip when clicking anywhere outside
     $(document).on('click', function (event) {
-        if (!$(event.target).closest('td:nth-child(10), #logTooltip').length) {
+        if (!$(event.target).closest('td:nth-child(8), #logTooltip').length) {
             $('#logTooltip').stop(true, true).fadeOut(100, function () {
                 $(this).css({ display: 'none' });
             });
