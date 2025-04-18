@@ -53,6 +53,7 @@ def combine_reports(log_report, testcase_report, yang_report, output_file):
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Standalone Consolidated Test Report</title>
+  
   <style>
     body {{
       margin: 0;
@@ -95,6 +96,85 @@ def combine_reports(log_report, testcase_report, yang_report, output_file):
       height: 100%;
       border: none;
     }}
+    +   /* dark‐mode overrides */
+   .dark-mode {{
+     background-color: #1e1e1e;
+     color: #f0f0f0;
+   }}
+   .dark-mode #fixedHeader {{
+     background-color: rgba(50, 50, 50, 0.9);
+   }}
+   .dark-mode .nav-button {{
+     background-color: #555;
+     color: #f0f0f0;
+   }}
+   .dark-mode .nav-button:hover {{
+     background-color: #888;
+   }}
+   /* invert iframe content for dark theme */
+   .dark-mode iframe {{
+     filter: invert(1) hue-rotate(180deg);
+   }}
+
+   .switch {{
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}}
+
+.switch input {{ 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}}
+
+.slider {{
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #707071;
+  -webkit-transition: .4s;
+  transition: .4s;
+}}
+
+.slider:before {{
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}}
+
+input:checked + .slider {{
+  background-color: #d1d3d5;
+}}
+
+input:focus + .slider {{
+  box-shadow: 0 0 1px #2196F3;
+}}
+
+input:checked + .slider:before {{
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}}
+
+/* Rounded sliders */
+.slider.round {{
+  border-radius: 34px;
+}}
+
+.slider.round:before {{
+  border-radius: 50%;
+}}
   </style>
   <script>
   function showSection(id) {{
@@ -149,14 +229,16 @@ def combine_reports(log_report, testcase_report, yang_report, output_file):
 </script>
 
 
-
-
 </head>
 <body>
   <div id="fixedHeader">
     <button class="nav-button" onclick="showSection('testcase_section')">Testcase Report</button>
     <button class="nav-button" onclick="showSection('log_section')">Log Report</button>
     <button class="nav-button" onclick="showSection('yang_section')">Yang Tree Report</button>
+    <label class="switch">
+    <input id="theme-toggle" type="checkbox" checked>
+    <span class="slider round"></span>
+  </label>
   </div>
   <div id="log_section" class="section">
     <iframe srcdoc="{encoded_log}"></iframe>
