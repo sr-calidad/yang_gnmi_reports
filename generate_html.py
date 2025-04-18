@@ -159,6 +159,34 @@ def generate_skeleton_dict(validations,
     
     return skeleton_dict
 
+def hash_json_data(json_data):
+    """
+    Generate a hash value for JSON data to detect duplicates.
+
+    Args:
+        json_data (dict): The JSON data to hash.
+
+    Returns:
+        str: A hash string representing the JSON data.
+    """
+    json_string = json.dumps(json_data, sort_keys=True)
+    return hashlib.md5(json_string.encode()).hexdigest()
+
+
+import hashlib
+
+def hash_json_data(json_data):
+    """
+    Generate a hash value for JSON data to detect duplicates.
+
+    Args:
+        json_data (dict): The JSON data to hash.
+
+    Returns:
+        str: A hash string representing the JSON data.
+    """
+    json_string = json.dumps(json_data, sort_keys=True)
+    return hashlib.md5(json_string.encode()).hexdigest()
 
 def process_directory(yaml_file, directory, output_folder="logs"):
     directory = os.path.abspath(directory)
@@ -186,7 +214,7 @@ def process_directory(yaml_file, directory, output_folder="logs"):
     if not json_files:
         logger.error(f"No valid JSON files found in directory '{directory}'.")
         sys.exit(1)
-    
+
 
     
     aggregated_report = {}
@@ -219,6 +247,7 @@ def process_directory(yaml_file, directory, output_folder="logs"):
         report, model = summarize_test_report(tc_result_filename=json_path, validation_file=yaml_file, log_file=log_path)
         if not yang_model:
             yang_model = model
+        yang_model = model
        
         # Merge the report data into aggregated_report.
         for key, value in report.items():
@@ -264,7 +293,8 @@ def process_directory(yaml_file, directory, output_folder="logs"):
     # Generate the final HTML by replacing the placeholders in the template.
     final_html = template.replace("{{data}}", json.dumps(aggregated_report))
     if yang_model.startswith("Model - "):
-        yang_model = yang_model.replace("Model - ", "", 1)
+   
+        yang_model = yang_model.replace("Model - ", "Model : ", 1)
 
     final_html = final_html.replace("{{heading}}", yang_model if yang_model else "")
     #final_html = final_html.replace("{{heading}}", yang_model if yang_model else "")
@@ -551,6 +581,10 @@ def update_skeleton_dict(operations, skeleton_dict, log_string, gnmi_log, test_l
     Returns:
         dict: The updated skeleton dictionary.
     """
+    if type_key not in skeleton_dict:
+        logger.debug(f"Type key '{type_key}' is not present (likely not supported). Skipping update for test '{test_name}'.")
+        return skeleton_dict
+    
     skeleton_dict[type_key]["full_path"] = test_name
     skeleton_dict[type_key]["new_log"] = new_log
     skeleton_dict[type_key]["status"] = json_result if json_result is not None else status
@@ -709,7 +743,7 @@ def generate_html_from_yaml(yaml_file, json_file, template_file, output_file, lo
     
     # Replace placeholders in the template with actual data
     final_html = template.replace("{{data}}", json.dumps(summarized_report))
-    final_html = final_html.replace("{{heading}}", json.dumps(input_yang_model))
+    final_html = final_html.replace("{{heading}}", input_yang_model)
     final_html = final_html.replace("{{treeData}}", json.dumps(tree))
     
     # Write the populated HTML content to the output file
@@ -795,8 +829,8 @@ def main(yaml_file, json_file, log_file=None, output_folder="logs"):
     2. Running with a directory containing multiple JSON and log files.
 
     Ensures the correct file format:
-    - JSON file must end with "_result.json"
-    - Log file (if provided) must end with "_tc_result.log"
+    - JSON file must end with "-tc_result.json"
+    - Log file (if provided) must end with "-tc_result.log"
     """
 
     if os.path.isdir(json_file):
@@ -806,8 +840,8 @@ def main(yaml_file, json_file, log_file=None, output_folder="logs"):
 
     # Existing validation logic (unchanged)
     
-    if not json_file.endswith("_result.json"):
-        logger.error(f"Invalid JSON file format: '{json_file}'. It must end with '_result.json'.")
+    if not json_file.endswith("-tc_result.json"):
+        logger.error(f"Invalid JSON file format: '{json_file}'. It must end with '-tc_result.json'.")
         sys.exit(1)
 
     if log_file and not log_file.endswith("-tc_result.log"):
