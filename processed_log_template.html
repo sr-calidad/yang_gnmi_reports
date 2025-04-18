@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
       rel="stylesheet"
@@ -509,11 +510,11 @@ details[open] {
     
           const iconColor = status === 'anomaly_pass' ? '#1e79ff' :
                   status === 'promoted_pass' ? 'orange' : color;
-const icon = status === 'fail'
-  ? '<span style="color: red;">X</span>'
-  : `<span style="color: ${iconColor}; font-size: 15px;">&#10003;</span>`;
+          const icon = status === 'fail'
+            ? '<span style="color: red;">X</span>'
+            : `<span style="color: ${iconColor}; font-size: 15px;">&#10003;</span>`;
 
-;
+          ;
 
           const li = document.createElement("li");
           li.innerHTML = `${tc}<span style="float: right;">${icon}</span>`;
@@ -572,8 +573,13 @@ const icon = status === 'fail'
         // Add a slight delay to ensure elements are loaded before applying scroll sync
         setTimeout(() => {
             // Only highlight first item if no test_id exists
-            const urlParams = new URLSearchParams(window.location.search);
-                if (!urlParams.has('test_id')) {
+            let urlParams;
+            try {
+              urlParams = new URLSearchParams(window.parent.location.search);
+            } catch {
+              urlParams = new URLSearchParams(window.location.search);
+            }
+            if (!urlParams.has('test_id')) {
                     const firstItem = document.querySelector("#testcase-list li");
                     if (firstItem) {
                         firstItem.classList.add("active");
@@ -701,6 +707,5 @@ const icon = status === 'fail'
 // });
 
 </script>
-
   </body>
 </html>
