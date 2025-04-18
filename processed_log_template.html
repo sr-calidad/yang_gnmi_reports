@@ -3,16 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
       rel="stylesheet"
     />
     <link href="https://fonts.cdnfonts.com/css/times-new-roman" rel="stylesheet">
-    <title>Testcase Reportsss - {{model_info_raw}}</title>
-    
-      
-   
+  
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
       rel="stylesheet"
@@ -31,25 +27,10 @@
       padding: 0;
       font-family: Arial, sans-serif;
       background: #b7afaf;
-      /* background: linear-gradient(
-      135deg
-,     rgb(145 145 145) 0%, rgb(144 122 122) 100%);
-      overflow: hidden; */
+    
     }
     
-    /* header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 110%;
-    background: linear-gradient(135deg, rgb(209 209 209) 0%, rgb(144 122 122) 100%); /* Same as consolidated report */
-    /* z-index: 1000;
-    text-align: center;
-    padding: 15px 0;
-    color: white;
-    font-family: "Times New Roman", serif;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-} */ 
+
 
     header {
         position: absolute; /* Instead of fixed or sticky */
@@ -64,48 +45,16 @@
         font-family: "Times New Roman", serif;
         z-index: 1000;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        border-bottom: 4px solid;
     }
     
 
-    /* header h1 {
-        font-family: "Times New Roman", serif !important;
-        margin: 0;
-        font-size: 1.5rem;
-        border-bottom: #211d1d;
-        } */
-
-    /* .title {
-        font-family: "Times New Roman", serif !important;
-        font-size: 24px; /* Adjust size as needed */
-        /* font-weight: bold; */
-        /* text-align: center; */
-        /* color: black; Change color if needed */
-      /* } */ 
-
-
-
-  
 
   /* Ensure content isn't hidden under the fixed header */
   body {
       padding-top: 60px; /* Adjust as needed */
   }
 
-    /* header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      /* background: inherit; */
-      /* z-index: 1000;
-      text-align: center;
-      padding: 6px 0;
-    } */ */
-    /* header h1 {
-      margin: 0;
-      font-size: 1.5rem;
-      border-bottom: #211d1d;
-    } */
 
     summary.collapsible-summary {
       color: #292e2f;
@@ -124,7 +73,7 @@
     /* Main container placed below header */
     #container {
       position: absolute;
-      top: 8px; /* Offset for fixed header */
+      top: 15px; /* Offset for fixed header */
       bottom: 0;
       width: 100%;
       display: flex;
@@ -242,7 +191,7 @@
       transition: none !important;
 }
     #testcase-list li.active {
-        background-color: #c8ccd5 !important;
+        background-color: #dddddd !important;
         color: #111 !important;
         transition: none !important;
 }
@@ -352,17 +301,7 @@ details[open] {
       width: auto;
       border: 1px solid #ccc;
       font-size: 0.9rem;
-      
-/*       
-      padding: 10px;
-      border: 1px solid #ccc;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      margin: 10px 0;
-      border-radius: 4px;
-      font-size: 0.9rem;
-      max-width: 100%; */
+
     }
 
 
@@ -418,7 +357,7 @@ details[open] {
     <header>
       <!-- <h1 style="font-family: 'Times New Roman', serif !important;">Testcase Logs <span class="small-arrow">&#9654;</span> Model : {{model_info_raw}}</h1> -->
 
-      <h1 style="font-family: 'Times New Roman', serif !important;">
+      <h1 style="font-family: 'Times New Roman', serif !important; font-size: 22px !important;">
         Testcase Logs{{model_heading}}
       </h1>
       
@@ -510,11 +449,11 @@ details[open] {
     
           const iconColor = status === 'anomaly_pass' ? '#1e79ff' :
                   status === 'promoted_pass' ? 'orange' : color;
-          const icon = status === 'fail'
-            ? '<span style="color: red;">X</span>'
-            : `<span style="color: ${iconColor}; font-size: 15px;">&#10003;</span>`;
+const icon = status === 'fail'
+  ? '<span style="color: red;">X</span>'
+  : `<span style="color: ${iconColor}; font-size: 15px;">&#10003;</span>`;
 
-          ;
+;
 
           const li = document.createElement("li");
           li.innerHTML = `${tc}<span style="float: right;">${icon}</span>`;
@@ -573,13 +512,14 @@ details[open] {
         // Add a slight delay to ensure elements are loaded before applying scroll sync
         setTimeout(() => {
             // Only highlight first item if no test_id exists
+            // Only highlight first item if no test_id exists
             let urlParams;
-            try {
-              urlParams = new URLSearchParams(window.parent.location.search);
-            } catch {
-              urlParams = new URLSearchParams(window.location.search);
-            }
-            if (!urlParams.has('test_id')) {
+              try {
+                urlParams = new URLSearchParams(window.parent.location.search);
+              } catch {
+                urlParams = new URLSearchParams(window.location.search);
+              }
+                if (!urlParams.has('test_id')) {
                     const firstItem = document.querySelector("#testcase-list li");
                     if (firstItem) {
                         firstItem.classList.add("active");
@@ -665,7 +605,7 @@ details[open] {
         }
     });
 
-    // OR for single entry of result
+    // OR for single entry of result --> keep this
 //     document.addEventListener('DOMContentLoaded', () => {
 //   // Get test_id from URL
 //   const params = new URLSearchParams(window.location.search);
@@ -707,5 +647,6 @@ details[open] {
 // });
 
 </script>
+
   </body>
 </html>
