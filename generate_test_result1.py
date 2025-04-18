@@ -234,46 +234,22 @@ def dict_data_handling(files, filename_result):
                 deviation_field = "No" if xpath not in deviations else "Yes"
                 platform_val = platform_support.get(xpath, "NA")
                 platform_val1 = platform_val if platform_val != "NA" else "Not Applicable"
-                
-                result_field = ""
-                if success == "FAIL":
-                    if deviation_field == "Yes":
-                        deviation_failures += 1
-                    if deviation_field == "Yes" or platform_val in ['NS', 'NA']:
-                        deviation_platform_count += 1
-                        result_field = "PASS" + "(D)" + f"(P-{platform_val1})"
-                    elif deviation_field == "No" and platform_val in ['S']:
-                        result_field = "FAIL"
-                else:
-                    # The following lines seem to intend to count or adjust based on deviations,
-                    # but note that adding 1 to a string is not usually the desired operation.
-                    if deviation_field == 'Yes':
-                        deviation_field += "1"
-                    if deviation_field == "Yes" or platform_val in ['NS', 'NA']:
-                        deviation_platform_count += 1   
-                        result_field = "PASS" + "(D)" + f"(P-{platform_val1})"
-                    else:
-                        result_field = "PASS" + f"(P-{platform_val1})"
-
-                # metadata = data.get("metadata", {})
                
-                total_validations = result.get("total_validations", 0)
-                passed_validations = result.get("passed_validations", 0)
-                failed_validations = result.get("failed_validations", 0)
-                ignored_validations = result.get("ignored_validations", 0)
-                coverage = result.get("coverage", 0)
-                test_log = result.get("test_log", "N/A")
-                gnmi_log = result.get("gnmi_log", "N/A")
-
-                subscribe_field = "PASS" if result.get("success", False) else "FAIL"
-                inner_logs = ""
+                # inner_logs = ""
+                # if success == "FAIL":
+                #     for inner_result in result.get("results", []):
+                #         log_text = inner_result.get("log", "N/A")
+                #         inner_logs += log_text + "<br/>"
+                # else:
+                #     inner_logs = ""
                 if success == "FAIL":
-                    for inner_result in result.get("results", []):
-                        log_text = inner_result.get("log", "N/A")
-                        inner_logs += log_text + "<br/>"
+                    inner_logs = "".join(
+                        inner_result.get("log", "N/A") + "<br/>"
+                            for inner_result in result.get("results", [])
+                        )
+                    link_text = inner_logs
                 else:
-                    inner_logs = ""
-
+                    link_text = "View log"
                 detail_rows += f"""
                 <tr>
                     <td style="text-align: right;">{s_no}</td>
@@ -286,8 +262,15 @@ def dict_data_handling(files, filename_result):
                     <td style="color: {verdict_color}; font-weight: bold;">{verdict}</td>
                     <td>{verdict_reason}</td>
                     <td>
-                        <a href="LOG_REPORT_PLACEHOLDER?test_id={unique_test_id}" onclick="openLogInNewTab(event, '{unique_test_id}', this)">{inner_logs}</a>
-                </td>
+                        <a href="#"
+                            onclick="window.open(
+                            window.top.location.href.split('?')[0] + '?test_id={unique_test_id}',
+                            '_blank'
+                            ); return false;">
+                            {link_text}
+                        </a>
+                        </td>
+
                 </tr>
                 """
                 s_no += 1
@@ -411,41 +394,25 @@ def dict_data_handling(files, filename_result):
             deviation_field = "No" if xpath not in deviations else "Yes"
             platform_val = platform_support.get(xpath, "NA")
             platform_val1 = platform_val if platform_val != "NA" else "Not Applicable"
-            
-            result_field = ""
-            if success == "FAIL":
-                if deviation_field == 'Yes':
-                    deviation_field += "1"
-                if deviation_field == "Yes" or platform_val in ['NS', 'NA']:  
-                    result_field = "PASS" + "(D)" + f"(P-{platform_val1})"
-                elif deviation_field == "No" and platform_val in ['S']:
-                    result_field = "FAIL"
-            else:
-                if deviation_field == 'Yes':
-                    deviation_field += "1"
-                if deviation_field == "Yes" or platform_val in ['NS', 'NA']:  
-                    result_field = "PASS" + "(D)" + f"(P-{platform_val1})"
-                else:
-                    result_field = "PASS" + f"(P-{platform_val1})"
+
             verdict = result.get("verdict", "N/A")
             verdict_reason = result.get("verdict_reason", "N/A")
             verdict_color = result.get("verdict_color", "black")
-            total_validations = result.get("total_validations", 0)
-            passed_validations = result.get("passed_validations", 0)
-            failed_validations = result.get("failed_validations", 0)
-            ignored_validations = result.get("ignored_validations", 0)
-            coverage = result.get("coverage", 0)
-            test_log = result.get("test_log", "N/A")
-            gnmi_log = result.get("gnmi_log", "N/A")
-
-            subscribe_field = "PASS" if result.get("success", False) else "FAIL"
-            inner_logs = ""
+            # inner_logs = ""
+            # if success == "FAIL":
+            #     for inner_result in result.get("results", []):
+            #         log_text = inner_result.get("log", "N/A")
+            #         inner_logs += log_text + "<br/>"
+            # else:
+            #     inner_logs = ""
             if success == "FAIL":
-                for inner_result in result.get("results", []):
-                    log_text = inner_result.get("log", "N/A")
-                    inner_logs += log_text + "<br/>"
+                inner_logs = "".join(
+                    inner_result.get("log", "N/A") + "<br/>"
+                        for inner_result in result.get("results", [])
+                    )
+                link_text = inner_logs
             else:
-                inner_logs = ""
+                link_text = "View log"
             detail_rows += f"""
             <tr>
             <td style="text-align: right;">{s_no}</td>
@@ -457,8 +424,16 @@ def dict_data_handling(files, filename_result):
             <td>{platform_val1}</td>
             <td style="color: {verdict_color}; font-weight: bold;">{verdict}</td>
             <td>{verdict_reason}</td>
-             <td> <a href="javascript:void(0)" onclick='parent.postMessage({{"action": "navigateToLogReport", "testId": "{unique_test_id}"}}, "*");'>{inner_logs}</a></td>
-            </tr>
+             <td>
+  <a href="#"
+     onclick="window.open(
+       window.top.location.href.split('?')[0] + '?test_id={unique_test_id}',
+       '_blank'
+     ); return false;">
+    {link_text}
+  </a>
+</td>
+   </tr>
             """
             s_no += 1
 
@@ -520,10 +495,6 @@ def dict_data_handling(files, filename_result):
         out_file.write(template_html)
 
     print(f"Generated HTML report at: {os.path.abspath(output_path)}")
-
-import os
-import sys
-import json
 
 def main():
     if len(sys.argv) < 2:
