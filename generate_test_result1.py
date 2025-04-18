@@ -256,9 +256,7 @@ def dict_data_handling(files, filename_result):
                     <td>{test_id}</td>
                     <td>{testcase}</td>
                     <td>{testcase_operation}</td>   
-                    <td>{success}</td>
-                    <td>{deviation_field}</td>
-                    <td>{platform_val1}</td>        
+                    <td>{success}</td>    
                     <td style="color: {verdict_color}; font-weight: bold;">{verdict}</td>
                     <td>{verdict_reason}</td>
                     <td>
@@ -419,8 +417,6 @@ def dict_data_handling(files, filename_result):
             <td>{testcase}</td>
             <td>{testcase_operation}</td>
             <td>{success}</td>
-            <td>{deviation_field}</td>
-            <td>{platform_val1}</td>
             <td style="color: {verdict_color}; font-weight: bold;">{verdict}</td>
             <td>{verdict_reason}</td>
              <td> <a href="#"
