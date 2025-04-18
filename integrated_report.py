@@ -97,17 +97,60 @@ def combine_reports(log_report, testcase_report, yang_report, output_file):
     }}
   </style>
   <script>
-    function showSection(sectionId) {{
-      document.querySelectorAll('.section').forEach(function(sec) {{
-        sec.classList.remove('active');
-      }});
-      document.getElementById(sectionId).classList.add('active');
+  function showSection(id) {{
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }}
+
+  window.onload = function() {{
+    // 0) Nuke any “#…” in the URL so the browser can’t auto‑jump
+    if (window.location.hash) {{
+      history.replaceState(null, '', window.location.pathname + window.location.search);
     }}
-    window.onload = function() {{
-      // Show the testcase report by default.
+    // 1) Force the parent back to the very top
+    window.scrollTo(0, 0);
+
+    const params = new URLSearchParams(window.location.search);
+    const testId = params.get('test_id');
+
+    if (testId) {{
+      // 2) Show the Log Report
+      showSection('log_section');
+
+      // 3) Drill into the iframe and highlight + scroll
+      const frame = document.querySelector('#log_section iframe');
+      const doc   = frame.contentDocument || frame.contentWindow.document;
+
+      const leftLi = doc.querySelector(`#testcase-list li[data-tc="${{testId}}"]`);
+      const target = doc.getElementById('testcase-' + testId);
+
+      if (leftLi && target) {{
+        // clear old
+        doc.querySelectorAll('#testcase-list li.active, #logContent > div.active')
+           .forEach(el => el.classList.remove('active'));
+
+        leftLi.classList.add('active');
+        target.classList.add('active');
+
+        // scroll the left list
+        doc.querySelector('#left-panel .card-body')
+           .scrollTop = leftLi.offsetTop - 100;
+
+        // INSTANT jump in the right panel (no smooth)
+        const rightContainer = doc.getElementById('rightPanelBody');
+        rightContainer.scrollTop = target.offsetTop - 60;
+      }}
+    }} else {{
+      // default: Testcase tab
       showSection('testcase_section');
-    }};
-  </script>
+    }}
+
+  }};
+</script>
+
+
+
+
 </head>
 <body>
   <div id="fixedHeader">
